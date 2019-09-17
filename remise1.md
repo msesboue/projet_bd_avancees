@@ -2,17 +2,15 @@
 
 ## Stratégie d'acquisition des données
 
-### Provenance des données
-
-### Méthode d'acquisition
+### Méthode d'acquisition et provenance des données
 
 Nous utiliserons les données publiques de la ville de Québec. Cette dernière fournie les données géographiques de ses pistes cyclables : <https://www.donneesquebec.ca/recherche/fr/dataset/vque_24>
 
-Pour les données concernant les restaurants, nous ...
+Pour les données concernant les restaurants, nous utiliserons une méthode de scrapping sur les pages du site <https://www.restoquebec.ca/>.
 
 ### Format des données
 
-Les données concernant les pistes cyclables de la ville de Québec sont disponibles dans plusieurs formats : CSV, GEOJSON, KML, SHP. Nous utiliserons le format GEOJSON car ...
+Les données concernant les pistes cyclables de la ville de Québec sont disponibles dans plusieurs formats : CSV, GEOJSON, KML, SHP. Nous utiliserons le format GEOJSON car celui ci est répendu, adapté aux applications web et supporté par la plupart des logiciels. Nous aurions pu choisir d'utiliser le format Shapefile qui est le plus répendu des formats de données geospatiales. Mais celui-ci implique à minima 3 fichiers (.SHP.DBF.SHX). De plus, nous devons générer le ficher des données restaurants à partir des données brutes récupérées, le format GEOJSON est plus facile à appréhender.
 
 ## Stratégie de déploiement
 
