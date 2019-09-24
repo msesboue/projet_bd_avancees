@@ -4,7 +4,7 @@ Afin de choisir la structure nécessaire à la mise en place de notre applicatio
 
 Dans un premier temps, nous restreindrons l'utilisation de l'application aux pistes cyclables de la ville de Québec.L'application doit pouvoir suggérer un parcours cyclable rencontrant certains types de restaurants pour un nombre d'arrêts spécifiés et une distance maximale à parcourir.L'utilisateur doit donc fournir un lieu de départ (nom du lieu et/ou ses coordonnées), le type de restaurants recherchés (ex: cuisine française, thaï), un nombre d'arrêts ainsi que la distance maximale qu'il veut parcourir. L'application doit alors retourner une série de lieux (nom du lieu et/ou ses coordonnées) ordonnancés afin de décrire un trajet de la longueur maximale spécifiée, de même que les restaurants (nom du restaurant et/ou ses coordonnées) situés sur ce parcours pour le nombre d'arrêts souhaités.
 
-Les bases de données supportant cette application doivent donc contenir au minimum les informations suivantes:
+Les bases de données supportant cette application doivent contenir au minimum les informations suivantes:
 
 | Les pistes cyclables | Les restaurants |
 |---|---|
@@ -38,7 +38,7 @@ Il y a une grande variété de choix concernant les serveurs web. Nous avons con
 Pour les besoin de l'application nous devons stocker:
 
 * Les données utilisateurs de bases (nom, prénom, image de profil ...)
-* Les données spatials pour les pistes cyclables et les restaurants de la ville de Québec
+* Les données spatiales pour les pistes cyclables et les restaurants de la ville de Québec
 * Les données spécifiques concernant les restaurants (type, adresse postale, description ...)
 
 Les données utilisateurs seront stockées dans une base de données de type clé-valeur. Ce sont les données de bases qui doivent être chargées dès l'ouverture de la l'application par l'utilisateur. Dans une BD de ce type, les clés, ici l'identifiant des utilisateurs, sont stockées en mémoire vive permettant ainsi un accès optimisé aux données. De même nous stockerons dans une BD similaire les données des restaurants. Nous considérons la BD Amazone DynamoBD pour le stockage des ces données.
@@ -56,7 +56,7 @@ Des images docker existent pour chacune des bases de données que nous souhaiton
 * <https://hub.docker.com/r/amazon/dynamodb-local/>
 * <https://hub.docker.com/_/mariadb>
 
-## Ressources
+## Sources
 
 Bases de données géospatiales :
 
