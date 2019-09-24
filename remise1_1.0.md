@@ -1,4 +1,4 @@
-# Remise 1 : Évaluer la faisabilité
+Remise 1 : Évaluer la faisabilité
 
 Les bases de données supportant l'application doivent contenir au minimum les informations suivantes:
 
