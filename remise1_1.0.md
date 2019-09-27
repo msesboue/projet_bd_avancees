@@ -1,9 +1,11 @@
-Remise 1 : Évaluer la faisabilité
+GLO-4035 Bases de données avancées / Remise 1 : Évaluer la faisabilité
+
+Équipe 10 : Martin Sasseville (990 059 038), Sean Manzambi (111 275 112), Matthias Sesboüé (111 276 425)
 
 Les bases de données supportant l'application doivent contenir au minimum les informations suivantes:
 
 * Les pistes cyclables : nom du lieu, coordonnées des points
-* Les restaurants : nom du restaurant, addresse du restaurant, coordonnées du restaurant, type de cuisine
+* Les restaurants : nom, adresse et coordonnées du restaurant, type de cuisine
 
 L'application doit pouvoir calculer un parcours pour atteindre la distance maximale demandée, identifier les restaurants du type voulu situés à moins de 50 mètres du parcours et obtenir le nombre d'arrêts spécifiés.
 
@@ -23,13 +25,13 @@ Format des données :
 * Données des pistes cyclables : format GEOJSON.
 * Nous devons générer le ficher GEOJSON des données restaurants à partir des données brutes récupérées.
 
-Serveur web : Nous choisierons Nginx.
+Serveur web : Nous choisirons Nginx.
 
 Base de données :
-  
-* Les données utilisateurs seront stockées dans une base de données de type clé-valeur, avec l'identifiant des utilisateurs comme clé. De même nous stockerons dans une BD similaire les données des restaurants avec l'identifiant des restaurants en clé. Nous considérons la BD Amazone DynamoBD pour le stockage des ces données.
+
+* Les données utilisateurs seront stockées dans une base de données de type clé-valeur, avec l'identifiant des utilisateurs comme clé. De même nous stockerons dans une BD similaire les données des restaurants avec l'identifiant des restaurants en clé. Nous considèrerons la BD Amazone DynamoBD pour le stockage de ces données.
 * Pour les données spatiales notre choix se porte sur MongoDB. Nous y stockerons d'une part les données des pistes cyclables ainsi que celles des points correspondant à la localisation des restaurants.
-* Enfin nous envisageons la possibilité de stocker certaines informations sur les restaurants, comme leurs types, dans une BD orientée colonnes pour optimiser les recherches en fonction de critères particuliers. Nous considérons la BD MariaDB pour cela.
+* Enfin nous envisageons la possibilité de stocker certaines informations sur les restaurants, comme leurs types, dans une BD orientée colonnes pour optimiser les recherches en fonction de critères particuliers. Nous considèrerons la BD MariaDB pour cela.
 
 Conteneurs Docker :
 
