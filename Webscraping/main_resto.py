@@ -36,7 +36,8 @@ def ws_resto(restaurants):
             labels = []
             for label in tmp.find_all("a", class_="search-cuisine-label"):
                 labels.append(label.text)
-            restaurants.append(Restaurant(title, address, pricing, labels, coordonnees))
+            if len(address) !=0:
+                restaurants.append(Restaurant(title, address, pricing, labels, coordonnees))
     print("Nombre de restaurant : "+str (len(restaurants)))
     return restaurants
 def struct2geojson(restaurants):
