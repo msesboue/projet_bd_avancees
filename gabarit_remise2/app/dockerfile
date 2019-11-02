@@ -18,3 +18,5 @@ EXPOSE 8080
 
 # Lancer le script app.py quand le container démarre
 #CMD ["python","-u","/app/app.py"]
+
+# Lancer l'initialisation des données de la bd
