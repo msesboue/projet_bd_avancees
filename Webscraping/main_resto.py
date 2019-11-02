@@ -47,8 +47,8 @@ def struct2geojson(restaurants):
         features.append(Feature(properties={"nom" : r.title, "adresse" : r.address, "prix" : r.pricing, "labels": r.labels}, geometry=Point((float(r.coordonnees[0]), float(r.coordonnees[1])))))
     features_collection = FeatureCollection(features)
         
-    with open('myfile.geojson', 'w') as f:
-        dump(features_collection, f)
+    with open('restaurants.geojson', 'w', encoding="utf-8-sig") as f:
+        dump(features_collection, f, ensure_ascii=False)
 
 def main():
     restaurants = []

@@ -6,30 +6,32 @@
         <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-        <title>Hello World</title>
+        <title>Vélo Epicurien</title>
     </head>
     <body>
         <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
   <!-- Instruction -->
             <div class="w3-display-middle">
-                <h1 class="w3-jumbo w3-animate-top w3-center">Hello World</h1>
+                <h1 class="w3-jumbo w3-animate-top w3-center">Vélo Epicurien</h1>
                 <hr class="w3-border-grey" style="margin:auto;width:40%">
-                <p class="w3-large w3-center">Legends say that if you chant "Hello World" enough times, you get special dev powers.</p>
             <div>
             
             <br>
             <!-- display -->
             <div>
-                <h2>Input Hello World</h2>
-                <form action="/new" method="POST">
-                    <input type="text" name="helloworld" id="helloworld" value="helloworld" />	
-                    <input class="myButton" type="submit" value="submit" />
+                <h2>Requête - Nombre de restaurant</h2>
+                <form action="/nb_restaurant" method="GET">
+                    <input class="myButton" type="submit" value="Envoyer" />
+                </form>
+                
+                <p>{{ nb_restaurant }}</p>
+
+                <h2>Requête - Longueur de la distance totale de piste cyclable</h2>
+                <form action="/distance_totale" method="GET">
+                    <input class="myButton" type="submit" value="Envoyer" />
                 </form>
 
-                <h2>Hello World Chant Wall</h2>
-                {% for item in items %}
-                <p>{{ item["helloworld"] }}</p>
-                {% endfor %}
+                <p>{{ distance_totale }}</p>
             </div>
         </div>
     </body>
