@@ -1,15 +1,12 @@
-version: "3"
-services:
-  app:
-    build: [chemin_vers_votre_application]
-    ports:
-      - [port_mapping_habituel_pour_votre_application]
-    links:
-      - [nom_du_service_de_bd]
+web:
+  build: .
+  command: python -u app.py
+  ports:
+    - "5000:5000"
+  volumes:
+    - ./app:/app
+  links:
+    - db
 
-  bd:
-    image: [image_de_la_bd_exemple_mongo:4.2]
-    volumes:
-      - [monter_le_volume_pour_la_sauvergarde_de_la_bd]
-    ports:
-      - [port_mapping_habituel_pour_la_bd]
+db:
+  image: mongo:3.6.1
