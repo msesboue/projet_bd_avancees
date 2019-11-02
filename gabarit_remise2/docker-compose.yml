@@ -6,7 +6,21 @@ web:
   volumes:
     - ./app:/app
   links:
-    - db
+    - mongodb
+    - neo4j
 
-db:
+mongodb:
   image: mongo:3.6.1
+
+mongo-seed:
+  image: mongo:3.6.1
+  restart: "no"
+  links: 
+    - mongodb
+  volumes:
+    - ./app:/app
+  command:
+    "mongoimport --host mongodb --port 27017 --db appdb --collection restaurant --mode upsert --type json --file /app/data/myfile.json --jsonArray"
+
+neo4j:
+  image: neo4j:latest
