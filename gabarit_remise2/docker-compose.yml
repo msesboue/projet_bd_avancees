@@ -11,6 +11,8 @@ web:
 
 mongodb:
   image: mongo:3.6.1
+  volumes: 
+    - ./data/db:/data/db
 
 mongo-seed:
   image: mongo:3.6.1

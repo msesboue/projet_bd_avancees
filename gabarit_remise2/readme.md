@@ -30,4 +30,8 @@ Veuillez vous référer à l'énoncé du projet pour les fonctionnalités que vo
   * MongoDB: 198kb
   * Neo4J: 131kb
 
+## Remarques
+
+La base de données Neo4J n'est pas encore peuplée.
+Nous devons mettre en forme les fichiers JSON pour extraire des listes de restaurants à proximité de chaque portion de piste cyclable.
 
