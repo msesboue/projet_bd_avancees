@@ -1,7 +1,7 @@
 # Partir de l’image officielle de Python 3.7
 FROM python:3.7-slim
 
-# Mettre le code de l’application dans le répertoire / de l’image
+# Mettre le code de l’application dans le répertoire / de l’image  for doc in client.appdb.piste_cyclable.find():
 WORKDIR /app
 
 # Copier les librairie nécessaire à votre application
@@ -18,5 +18,3 @@ EXPOSE 8080
 
 # Lancer le script app.py quand le container démarre
 #CMD ["python","-u","/app/app.py"]
-
-# Lancer l'initialisation des données de la bd

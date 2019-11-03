@@ -20,7 +20,9 @@ mongo-seed:
   volumes:
     - ./app:/app
   command:
-    "mongoimport --host mongodb --port 27017 --db appdb --collection restaurant --mode upsert --type json --file /app/data/myfile.json --jsonArray"
-
+    "mongoimport --host mongodb --port 27017 --db appdb --collection restaurant --drop --mode upsert --type json --file /app/data/restaurants.json --jsonArray"
+  
+  command:
+    "mongoimport --host mongodb --port 27017 --db appdb --collection piste_cyclable --drop --mode upsert --type json --file /app/data/pistes_cyclables.json --jsonArray"
 neo4j:
   image: neo4j:latest
