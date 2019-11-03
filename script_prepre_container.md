@@ -59,3 +59,65 @@ docker stop data_prep
 docker system prune -f
 
 du -sh /data/db/    # taille d'un dossier
+
+## GeoJson
+
+Troisième paramètre des coordonnées d'un point est l'altitude
+
+## restaurants à proximité d'une piste cyclable
+
+Pour chaque document des pistes cyclables:
+
+* Extraire chaque point des lineString
+* Pour chaque 2 points consécutifs construire les 5 coordonnées des polygones entourant la ligne
+  * <https://docs.mongodb.com/manual/reference/operator/query/geoWithin/>
+* Pour chaque polygone construit faire une requête geowithin sur les restaurants
+  * Récupérer les distances de chaque restaurants à la piste
+* Stocker la liste des restaurants à chaque portion de piste
+  * Penser à éliminer les doublons à l'intérieur d'une même portion de piste ? (geoNear)
+* Extraire un document au format JSON
+* Construire la BD Neo4J
+  * noeuds: Portions de piste{ID, longueur}, restaurants{ID, nom}
+  * liaisons: à_proximité{distance}, est_reliée_à
+
+Casser les LineString en petit bout ?
+
+### Construire un tableau de pairs de coorconnées consécutives
+
+db.pistes.aggregate([
+    {$project:{
+        pistes_line:{$map:{
+            input:{$range:[0,{$size:"$geometry.coordinates"}]},
+            in:{$slice:["$geometry.coordinates","$$this",2]}
+                }
+            }
+        }
+    },
+    {$unwind: "$pistes_line"},
+    {$project: {_id:0, pistes_line: 1}},
+    {$out: "box4piste"}
+])
+
+boxes = {}
+skip = 0.0004522022
+
+db.box4piste.find().limit(5).forEach(
+    function(doc) {
+        toinsert = {"doc._id":[
+                [doc.pistes_line[0] - skip, doc.pistes_line[1] + skip],
+                [doc.pistes_line[3] + skip, doc.pistes_line[4] + skip],
+                [doc.pistes_line[3] + skip, doc.pistes_line[4] - skip],
+                [doc.pistes_line[0] - skip, doc.pistes_line[1] - skip],
+                [doc.pistes_line[0] - skip, doc.pistes_line[1] + skip]
+            ]}
+        db.boxes.insert(toinsert)
+    }
+)
+
+db.boxes.insert( {"doc._id": [
+                ["doc.pistes_line"[0][0] - skip, doc.pistes_line[0][1] + skip],
+                ["doc.pistes_line"[1][0] + skip, doc.pistes_line[1][1] + skip],
+                ["doc.pistes_line"[1][0] + skip, doc.pistes_line[1][1] - skip],
+                ["doc.pistes_line"[0][0] - skip, doc.pistes_line[0][1] - skip],
+                ["doc.pistes_line"[0][0] - skip, doc.pistes_line[0][1] + skip]
+            ]})
