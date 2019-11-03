@@ -19,19 +19,15 @@
             <br>
             <!-- display -->
             <div>
-                <h2>Requête - Nombre de restaurant</h2>
-                <form action="/nb_restaurant" method="GET">
-                    <input class="myButton" type="submit" value="Envoyer" />
+                <h2>Requêtes</h2>
+                <form action="/heartbeat" method="GET">
+                    <input class="myButton" type="submit" value="GET infos" />
                 </form>
                 
                 <p>{{ nb_restaurant }} restaurants</p>
 
-                <h2>Requête - Longueur de la distance totale de piste cyclable</h2>
-                <form action="/distance_totale" method="GET">
-                    <input class="myButton" type="submit" value="Envoyer" />
-                </form>
-
                 <p>{{ distance_totale }} mètres</p>
+
             </div>
         </div>
     </body>
