@@ -1,27 +1,28 @@
-web:
-  build: ./app
-  command: python -u app.py
-  ports:
-    - "8080:5000"
-  volumes:
-    - ./app:/app
-  links:
-    - mongodb
-    - neo4j
+version: "3"
+services:
+  app:
+    build: ./app
+    ports:
+      - 8080:5000
+    environment:
+      - production=1
+    links:
+      - mongo
+      - neo4j
 
-mongodb:
-  image: mongo:3.6.1
-  volumes: 
-    - ./data/db:/data/db
+  mongo:
+    image: mongo:4.2
+    volumes: 
+      - ./data/mongo:/data/db
+    ports:
+      - 27017:27017
 
-mongo-seed:
-  image: mongo:3.6.1
-  restart: "no"
-  links: 
-    - mongodb
-  volumes:
-    - ./app:/app
-  command: bash -c "mongoimport --host mongodb --port 27017 --db appdb --collection restaurants --drop --mode upsert --type json --file /app/data/restaurants.json --jsonArray && mongoimport --host mongodb --port 27017 --db appdb --collection pistes --drop --mode upsert --type json --file /app/data/pistes_cyclables.json --jsonArray"
-
-neo4j:
-  image: neo4j:latest
+  neo4j:
+    image: neo4j
+    volumes: 
+      - ./data/neo:/data/databases/graph.db
+    environment:
+      - NEO4J_AUTH=neo4j/projetBD
+    ports:
+      - 7474:7474
+      - 7687:7687
