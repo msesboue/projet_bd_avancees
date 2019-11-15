@@ -121,3 +121,21 @@ db.boxes.insert( {"doc._id": [
                 ["doc.pistes_line"[0][0] - skip, doc.pistes_line[0][1] - skip],
                 ["doc.pistes_line"[0][0] - skip, doc.pistes_line[0][1] + skip]
             ]})
+
+## Calculer les coordonnées d'un rectangle 500 mètres autour d'un segment
+
+ref : <https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters>
+
+new_latitude  = latitude  + (dy / r_earth) * (180 / pi);
+new_longitude = longitude + (dx / r_earth) * (180 / pi) / cos(latitude * pi/180);
+
+delta = 500 m
+r_earth = 6378 km = 6378000 m
+
+[[long1, lat1], [long2, lat2]] --> [
+    [long1 - delta, lat1 + delta], 
+    [long2 + delta, lat2 + delta],
+    [long2 + delta, lat2 - delta],
+    [long1 - delta, lat1 - delta], 
+    [long1 - delta, lat1 + delta]
+]

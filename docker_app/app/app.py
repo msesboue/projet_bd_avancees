@@ -18,9 +18,6 @@ app = Flask("Vélo Épicurien")
 mongo_client = MongoClient("{}:{}".format(mongo_server_uri, MONGODB_PORT))
 neo4j_graph = Graph("http://{}".format(neo4j_server_uri), auth={"neo4j","projetBD"})
 
-# MONGODB_HOST = os.environ["MONGODB_PORT_27017_TCP_ADDR"]
-# client = MongoClient(MONGODB_HOST, MONGODB_PORT)
-
 db = mongo_client.velo_epicurien
 
 db.pistes.create_index([("geometry.coordinates", GEO2D)])
