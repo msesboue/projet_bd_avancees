@@ -8,7 +8,7 @@ dx = 500
 dy = 500
 r_earth = 6378000
 
-boxes = {}
+boxes = []
 
 nb_pistes = len(file_pistes_data)
 
@@ -47,7 +47,7 @@ for piste in range(nb_pistes):
             lat1 - delta_lat1
         ]
 
-        boxes[segment_name] = {
+        boxes.append({
             "type": "segment",
             "properties": {
                 "ID": segment_name,
@@ -57,9 +57,9 @@ for piste in range(nb_pistes):
                     "type": "LineString",
                     "coordinates": [[long1, lat1], [long2, lat2]]
             }
-        }
+        })
 
-        boxes[box_name] = {
+        boxes.append({
             "type": "box_{}".format(dx),
             "properties": {
                 "segment_id": segment_name
@@ -68,7 +68,7 @@ for piste in range(nb_pistes):
                 "type": "Polygon",
                 "coordinates": [[top_left, top_right, bottom_right, bottom_left, top_left]]
             }
-        }
-        
+        })
+
 with open('pistes_boxes.json', 'w', encoding='utf-8-sig') as f:
     json.dump(boxes, f)

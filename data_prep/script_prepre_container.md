@@ -4,13 +4,17 @@
 
 docker run -d --name data_prep mongo:3.6.1
 
-docker cp restaurants.json data_prep:/data/restaurants.json
+docker cp ../docker_app/app/data/restaurants.json data_prep:/data/restaurants.json
 docker cp pistes_cyclables.json data_prep:/data/pistes_cyclables.json
+
+docker cp pistes_boxes.json data_prep:/data/pistes_boxes.json
 
 docker exec -it data_prep bash
 
 mongoimport --db appdb --collection restaurant --mode upsert --type json --file /data/restaurants.json --jsonArray
 mongoimport --db appdb --collection pistes --mode upsert --type json --file /data/pistes_cyclables.json --jsonArray
+
+mongoimport --db appdb --collection pistes --mode upsert --type json --file /data/pistes_boxes.json --jsonArray
 
 ## Requêtes mongo
 
