@@ -1,17 +1,10 @@
 # projet_bd_avancees
-Le projet de bases de données avancées
-## Remise 1 : Evaluer la faisabilité
-Deadline : 30 septembre 2019 à 23h59
 
-Avant de se lancer dans le développement d’une application, il est important de valider que les données nécessaires au projet existent et peuvent être expoitées. Dans cette remise, vous devez écrire un document d’une page au maximum l'a décrivant
+Le projet de bases de données avancées, vélo épicurien: <https://jtbai.github.io/GLO-4035-2019/evaluations/projet_ingenierie.html>
 
-- Stratégie d’acquisition des données (route de vélo, restaurants) 
-   - La Provenance
-   - La méthode d’acquisition
-   - Le format attendu des données
+## Structure du dossier
 
-- Stratégie de déploiement
-    - Le serveur web utilisé
-    - La disponibilité d’un conteneur
-    - Les bases de données utilisées
-    - La disponibilité de ces conteneurs
+* `data_prep` : dossier des test pour la préparation des jeux de données
+* `docker-app` : le code source pour lancer l'application (voir README du dossier)
+* `docs` : les documents produits au cours du projet
+* `Webscraping` : code source pour obtenir les données des restaurants
