@@ -12,10 +12,12 @@ boxes = []
 
 nb_pistes = len(file_pistes_data)
 
+piste_OBJECTIDs = [piste_id["properties"]["OBJECTID"] for piste_id in file_pistes_data]
+
 for piste in range(nb_pistes):
     type_piste = file_pistes_data[piste]['properties']['Type']
     for segment in range(len(file_pistes_data[piste]['geometry']['coordinates']) - 1):
-        segment_name = "{}.{}".format(piste, segment)
+        segment_name = "{}.{}".format(piste_OBJECTIDs[piste], segment + 1)
         box_name = "box_{}.{}".format(piste, segment)
         
         # on récupère les coordonnées des deux point qui forment le segement
@@ -47,22 +49,23 @@ for piste in range(nb_pistes):
             lat1 - delta_lat1
         ]
 
-        boxes.append({
-            "type": "segment",
-            "properties": {
-                "ID": segment_name,
-                "segment_type": type_piste
-            },
-            "geometry": {
-                    "type": "LineString",
-                    "coordinates": [[long1, lat1], [long2, lat2]]
-            }
-        })
+        # boxes.append({
+        #     "type": "segment",
+        #     "properties": {
+        #         "ID": segment_name,
+        #         "segment_type": type_piste
+        #     },
+        #     "geometry": {
+        #             "type": "LineString",
+        #             "coordinates": [[long1, lat1], [long2, lat2]]
+        #     }
+        # })
 
         boxes.append({
             "type": "box_{}".format(dx),
             "properties": {
-                "segment_id": segment_name
+                "segment_id": segment_name,
+                "OBJECTID": file_pistes_data[piste]['properties']['OBJECTID']
             },
             "geometry": {
                 "type": "Polygon",
@@ -70,5 +73,5 @@ for piste in range(nb_pistes):
             }
         })
 
-with open('pistes_boxes.geojson', 'w', encoding='utf-8-sig') as f:
+with open('pistes_boxes.json', 'w', encoding='utf-8-sig') as f:
     json.dump(boxes, f)

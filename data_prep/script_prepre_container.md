@@ -2,10 +2,10 @@
 
 ## Préparation du container
 
-docker run -d --name data_prep mongo:3.6.1
+docker run -d --name data_prep -p 27017:27017 mongo:3.6.1
 
 docker cp ../docker_app/app/data/restaurants.json data_prep:/data/restaurants.json
-docker cp pistes_cyclables.json data_prep:/data/pistes_cyclables.json
+docker cp ../docker_app/app/data/pistes_cyclables.json data_prep:/data/pistes_cyclables.json
 
 docker cp pistes_boxes.json data_prep:/data/pistes_boxes.json
 
@@ -14,7 +14,7 @@ docker exec -it data_prep bash
 mongoimport --db appdb --collection restaurant --mode upsert --type json --file /data/restaurants.json --jsonArray
 mongoimport --db appdb --collection pistes --mode upsert --type json --file /data/pistes_cyclables.json --jsonArray
 
-mongoimport --db appdb --collection pistes --mode upsert --type json --file /data/pistes_boxes.json --jsonArray
+mongoimport --db appdb --collection pistes_boxes --mode upsert --type json --file /data/pistes_boxes.json --jsonArray
 
 ## Requêtes mongo
 
@@ -23,6 +23,7 @@ use appdb
 show collections
 db.restaurant.find().limit(1).pretty()
 db.pistes.find().limit(1).pretty()
+db.pistes_boxes.find().limit(1).pretty()
 
 ### Création de l'index géographique
 
@@ -126,7 +127,7 @@ db.boxes.insert( {"doc._id": [
                 ["doc.pistes_line"[0][0] - skip, doc.pistes_line[0][1] + skip]
             ]})
 
-## Calculer les coordonnées d'un rectangle 500 mètres autour d'un segment
+### Calculer les coordonnées d'un rectangle 500 mètres autour d'un segment
 
 ref : <https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters>
 
@@ -143,3 +144,30 @@ r_earth = 6378 km = 6378000 m
     [long1 - delta, lat1 - delta], 
     [long1 - delta, lat1 + delta]
 ]
+
+### Requête Mongo pour extraire les listes de restaurants à proximité par tronçon
+
+nb_resto = db.restaurants.find().count()
+
+for (i = 0; i < nb_resto; i++){
+    box = db.pistes_boxes.find({},{_id: 0, "geometry.coordinates": 1}).limit(1).pretty()
+}
+
+db.restaurants.find(
+   {
+     loc: {
+       $geoWithin: {
+          $geometry: {
+             type : "Polygon" ,
+             coordinates: [ [ 
+                    [-72.64067549439955, 46.6163308329641],
+                    [-72.62780500366914, 46.61624551356211],
+                    [-72.62780500366914, 46.60726216776201],
+                    [-72.64067549439955, 46.607347487164],
+                    [-72.64067549439955, 46.6163308329641]
+                ] ]
+          }
+       }
+     }
+   }
+)
