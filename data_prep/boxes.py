@@ -70,5 +70,5 @@ for piste in range(nb_pistes):
             }
         })
 
-with open('pistes_boxes.json', 'w', encoding='utf-8-sig') as f:
+with open('pistes_boxes.geojson', 'w', encoding='utf-8-sig') as f:
     json.dump(boxes, f)
