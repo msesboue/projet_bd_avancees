@@ -173,3 +173,16 @@ db.restaurants.find(
      }
    }
 )
+
+
+db.restaurant.find(
+   {
+     "geometry":
+       { $near :
+          {
+            $geometry: { type: "Point",  coordinates: [ -71.24003988088926, 46.83234451991697 ] },
+            $maxDistance: 500
+          }
+       }
+   }
+)
