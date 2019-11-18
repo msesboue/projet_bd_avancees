@@ -41,5 +41,5 @@ for piste in range(nb_piste):
         restau_nearby['{}.{}'.format(piste_id, point + 1)] = [restau['properties'] for restau in restau_around]
 
 with open('resto_around_point.json', 'w', encoding='utf-8-sig') as f:
-    json.dump(restau_nearby, f)
+    json.dump(restau_nearby, f, ensure_ascii=False)
 
