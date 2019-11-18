@@ -20,8 +20,8 @@ neo4j_graph = Graph("http://{}".format(neo4j_server_uri), auth={"neo4j","projetB
 
 db = mongo_client.velo_epicurien
 
-db.pistes.create_index([("geometry.coordinates", GEO2D)])
-db.restaurants.create_index([("geometry.coordinates", GEO2D)])
+# db.pistes.create_index([("geometry.coordinates", GEO2D)])
+# db.restaurants.create_index([("geometry.coordinates", GEO2D)])
 
 @app.route("/", methods=["GET"])
 def homepage():
@@ -32,7 +32,7 @@ def heartbeat():
     nb_restaurant = mongo_client.velo_epicurien.restaurants.find().count()
 
     dist_pipeline = [
-        {"$group": {"_id": '',"total_dist": { "$sum": "$properties.Longueur" }}}, 
+        {"$group": {"_id": '',"total_dist": { "$sum": "$properties.LONGUEUR" }}}, 
         {"$project": {"_id": 0,"total_dist": "$total_dist"}}
     ]
     distance = list(db.pistes.aggregate(dist_pipeline))
