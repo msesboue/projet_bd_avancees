@@ -9,52 +9,59 @@ mongo_client = MongoClient("{}:{}".format(mongo_server_uri, MONGODB_PORT))
 
 db = mongo_client.appdb
 
+with open('pistes_boxes.json', 'r', encoding='utf-8-sig') as f:
+    pistes_boxes = json.load(f)
+
+with open('pistes_polygons.json', 'r', encoding='utf-8-sig') as f:
+    pistes_polygons = json.load(f)
+
+with open('../docker_app/app/data/pistes_cyclables.json', 'r', encoding='utf-8-sig') as f:
+    pistes_data = json.load(f)
+
 nb_restaurant = db.restaurant.find().count()
-nb_piste = db.pistes.find().count()
+nb_piste = len(pistes_data)
 
-resto_per_area = {}
+resto_per_area_box = {}
+resto_per_area_poly = {}
 
-raw_piste_OBJECTIDs = list(db.pistes.find({}, {"_id":0, "properties.OBJECTID": 1}))
-piste_OBJECTIDs = [piste_id["properties"]["OBJECTID"] for piste_id in raw_piste_OBJECTIDs]
+piste_IDs = [piste["properties"]["ID"] for piste in pistes_data]
 
-for piste_obj_id in piste_OBJECTIDs:
+for piste in range(nb_piste):
 
-    print("piste nb {}".format(piste_obj_id))
-
-    nb_segment = len(list(db.pistes.find({"properties.OBJECTID": piste_obj_id}, {"_id":0, "geometry.coordinates":1}))[0]["geometry"]["coordinates"]) - 1
-    
-    print("nb_segment = {}".format(nb_segment))
+    nb_segment = len(pistes_data[piste]['geometry']['coordinates']) - 1
     
     for segment in range(nb_segment):
 
-        print("segment = {}".format(segment + 1))
-        print("{}.{}".format(piste_obj_id, segment+1))
-        print("piste nb {}".format(piste_obj_id))
-        box_coordinates = list(db.pistes_boxes.find({"properties.segment_id": "{}.{}".format(piste_obj_id, segment + 1)}))[0]["geometry"]["coordinates"]
+        polygon_coordinates = pistes_polygons[piste + segment]['geometry']['coordinates']
 
-        print(box_coordinates)
-
-        restos_in_area = list(db.restaurant.find({
+        restos_in_area_poly = list(db.restaurant.find({
                                         "loc": {
                                             "$geoWithin": {
                                                 "$geometry": {
                                                     "type" : "Polygon",
-                                                    "coordinates": box_coordinates
+                                                    "coordinates": polygon_coordinates
                                                 }
                                             }
                                         }
                                     })
                                 )
 
-        resto_per_area["{}.{}".format(piste_obj_id, segment+1)] = restos_in_area
+        # box_coordinates = pistes_boxes[piste + segment]['box']
 
-with open('resto_per_area.json', 'w', encoding='utf-8-sig') as f:
-    json.dump(resto_per_area, f)
+        # restos_in_area_box = list(db.restaurant.find({"loc": 
+        #                                             {"$within": {
+        #                                                 "$box": box_coordinates
+        #                                                 }
+        #                                             }
+        #                                         })
+        #                                     )
 
+        # resto_per_area_box["{}.{}".format(piste_IDs[piste], segment+1)] = restos_in_area_box
 
+        resto_per_area_poly["{}.{}".format(piste_IDs[piste], segment+1)] = restos_in_area_poly
 
-# box = list(db.pistes_boxes.find({"properties.segment_id": "1.1"}))[0]["geometry"]["coordinates"]
+# with open('resto_per_area_box.json', 'w', encoding='utf-8-sig') as f:
+#     json.dump(resto_per_area_box, f)
 
-# box[0]['properties']['segment_id']
-
-# len(list(db.pistes.find({"properties.OBJECTID": 1}, {"_id":0, "geometry.coordinates":1}))[0]["geometry"]["coordinates"])
+with open('resto_per_area_poly.json', 'w', encoding='utf-8-sig') as f:
+    json.dump(resto_per_area_poly, f)

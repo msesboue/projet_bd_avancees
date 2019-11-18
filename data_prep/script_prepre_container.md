@@ -2,12 +2,13 @@
 
 ## Préparation du container
 
-docker run -d --name data_prep -p 27017:27017 mongo:3.6.1
+docker run -d --name data_prep -p 27017:27017 mongo:4.2
 
 docker cp ../docker_app/app/data/restaurants.json data_prep:/data/restaurants.json
 docker cp ../docker_app/app/data/pistes_cyclables.json data_prep:/data/pistes_cyclables.json
 
 docker cp pistes_boxes.json data_prep:/data/pistes_boxes.json
+docker cp pistes_polygons.json data_prep:/data/pistes_polygons.json
 
 docker exec -it data_prep bash
 
@@ -15,6 +16,7 @@ mongoimport --db appdb --collection restaurant --mode upsert --type json --file 
 mongoimport --db appdb --collection pistes --mode upsert --type json --file /data/pistes_cyclables.json --jsonArray
 
 mongoimport --db appdb --collection pistes_boxes --mode upsert --type json --file /data/pistes_boxes.json --jsonArray
+mongoimport --db appdb --collection pistes_poly --mode upsert --type json --file /data/pistes_polygons.json --jsonArray
 
 ## Requêtes mongo
 
