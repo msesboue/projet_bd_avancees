@@ -73,6 +73,12 @@ for key in restau_min_dist_keys:
     if restau_min_dist[key]['nom'] == None:
         del restau_min_dist[key]
 
+restau_min_dist_keys = list(restau_min_dist.keys())
+restaurants_point = {}
+restaurants_point['restaurants'] = []
+for key in restau_min_dist_keys:
+    restaurants_point['restaurants'].append(restau_min_dist[key])
+
 with open('resto_min_dist_to_point.json', 'w', encoding='utf-8-sig') as f:
-    json.dump(restau_min_dist, f, ensure_ascii=False)
+    json.dump(restaurants_point, f, ensure_ascii=False)
 
