@@ -18,3 +18,9 @@ Puis entrez `localhost:8080` sur votre navigateur:
 
 * Par défaut c'est la page d'acceuil qui s'affiche
 * `localhost:8080/heartbeat` : affiche le nombre restaurants et la longueur de piste dans la base
+
+Penser à donner à l'utilisateur les droits sur le dossier `./data` sinon la BD neo4j crash au lancement:
+
+```Bash
+sudo chmod -R 777 data/
+```
