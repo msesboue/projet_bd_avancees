@@ -27,8 +27,8 @@ for resto in range(len(restau_ids)):
     restau_min_dist[str(bson.objectid.ObjectId(restau_ids[resto]['_id']))] = {
         'nom': None,
         'adresse': None,
-        'point_id': None,
-        'min_dist': nearby_dist
+        'min_dist': nearby_dist,
+        'point': {}
     }
 
 
@@ -64,7 +64,15 @@ for piste in range(nb_piste):
             if new_dist < current_min_dist:
                 restau_min_dist[resto_id]['nom'] = restau_around[resto]['properties']['nom']
                 restau_min_dist[resto_id]['adresse'] = restau_around[resto]['properties']['adresse']
-                restau_min_dist[resto_id]['point_id'] = '{}.{}'.format(piste_id, point + 1)
+                restau_min_dist[resto_id]['point'] = {
+                    "ID" : '{}.{}'.format(piste_id, point + 1),
+				    "NOM_TOPOGRAPHIE" : pistes_data[piste]['properties']['NOM_TOPOGRAPHIE'],
+				    "TYPE" : pistes_data[piste]['properties']['TYPE'],
+                    "coordinates": {
+                        'longitude': point_coordinates[0],
+                        'latitude': point_coordinates[1]
+                    }
+                }
                 restau_min_dist[resto_id]['min_dist'] = new_dist
 
 # clean restau_min_dist from the empty values
