@@ -1,0 +1,816 @@
+﻿{
+    "restaurants": [
+        {
+            "nom": "Le Croquembouche",
+            "adresse": "225, rue St-Joseph E",
+            "min_dist": 425.9880478645457,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Le Clocher Penché",
+            "adresse": "203, rue Saint-Joseph E",
+            "min_dist": 406.88655459167234,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Lady Kookie Biscuiterie",
+            "adresse": "1, rue Saint-Jean",
+            "min_dist": 327.4739950687275,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Chez Tao",
+            "adresse": "104 rue Saint-Vallier Ouest",
+            "min_dist": 438.99534955463116,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Le Voisin",
+            "adresse": "299 rue Saint-Joseph Est",
+            "min_dist": 498.9124177131909,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Battuto",
+            "adresse": "527 boulevard Langelier",
+            "min_dist": 137.5819948171354,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Au Bonnet D'Âne",
+            "adresse": "298, rue St-Jean",
+            "min_dist": 402.2336308270354,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Le Frigo",
+            "adresse": "330, rue de St-Vallier E",
+            "min_dist": 484.41242630049476,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Cari Doré",
+            "adresse": "105 B, chemin Ste-Foy",
+            "min_dist": 372.9071100240397,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Soria",
+            "adresse": "145, rue St-Vallier O",
+            "min_dist": 455.78503374929323,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Poulet Portugais",
+            "adresse": "203, rue St-Jean",
+            "min_dist": 322.83485628025767,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Au Bonnet D'Âne",
+            "adresse": "298, rue St-Jean",
+            "min_dist": 402.2336308270354,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "La Baraque Gourmande",
+            "adresse": "1700 1re Avenue",
+            "min_dist": 374.06736797699324,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "Al Balade",
+            "adresse": "269, rue St-Joseph E.",
+            "min_dist": 472.1750484140745,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Ma Station Café",
+            "adresse": "161 rue St-Vallier O",
+            "min_dist": 463.013547918054,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Bati Bassac",
+            "adresse": "125, rue St-Joseph E",
+            "min_dist": 359.68579085796836,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Le Varadero",
+            "adresse": "189, rue St-Joseph",
+            "min_dist": 389.6634426732385,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Chez Victor",
+            "adresse": "145 rue St-Jean",
+            "min_dist": 299.96650083304894,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Maelstrøm Saint-Roch",
+            "adresse": "181 St-Vallier E",
+            "min_dist": 247.66106891947055,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Le Mezzé",
+            "adresse": "95 chemin Ste-Foy",
+            "min_dist": 381.88023937670664,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Chez Fredj",
+            "adresse": "85 St-Vallier E",
+            "min_dist": 197.89719233262454,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Café Cam Ranh",
+            "adresse": "1650, 1e Avenue",
+            "min_dist": 436.9712297130491,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "Nektar Caféologue",
+            "adresse": "235, rue St-Joseph E",
+            "min_dist": 431.4967608209471,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "William J. Walter Saucissier",
+            "adresse": "165 Rue St-Joseph E",
+            "min_dist": 380.3328338913143,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Les Brûleries",
+            "adresse": "1789 1re Ave",
+            "min_dist": 313.2378876582815,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "Café Le Guichet",
+            "adresse": "135 Rue Saint-Vallier O",
+            "min_dist": 433.4060031730428,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Bar Mon Calme",
+            "adresse": "40, rue St-Jean",
+            "min_dist": 298.68709516168724,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Ly-Hai",
+            "adresse": "815, ave. Cartier",
+            "min_dist": 418.80502201616093,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Taverne Jos Dion",
+            "adresse": "65 Rue Saint-Joseph O",
+            "min_dist": 369.19131229943497,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Mechoui Marrakech",
+            "adresse": "223 St-Joseph E",
+            "min_dist": 417.06375411448533,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "L'Affaire Est Ketchup",
+            "adresse": "46, rue St-Joseph E",
+            "min_dist": 352.5190645753922,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Fromagerie des Grondines",
+            "adresse": "199,rue St-Joseph E",
+            "min_dist": 391.3408294744018,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Le renard et la chouette",
+            "adresse": "125, rue St-Valiier O.",
+            "min_dist": 426.2820065853773,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Café Castelo Maison de torréfaction",
+            "adresse": "807, ave. Cartier",
+            "min_dist": 391.6406191049391,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "TamTam Café",
+            "adresse": "421, boul. Langelier",
+            "min_dist": 305.0119565561724,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Chez Mai",
+            "adresse": "2390, 1 Ave",
+            "min_dist": 216.0987532853293,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "La Petite Dana",
+            "adresse": "311, rue St-Paul",
+            "min_dist": 397.35243363939276,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Scanner Bistro",
+            "adresse": "291, rue St-Vallier E",
+            "min_dist": 431.60645513180526,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Nina Pizza Napolitaine",
+            "adresse": "410, rue St-Anselme",
+            "min_dist": 343.85800065280694,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Le Pied Bleu",
+            "adresse": "179, rue St-Vallier O",
+            "min_dist": 484.7588501882346,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Le Marinier",
+            "adresse": "1769, 1re ave.",
+            "min_dist": 332.56574888601915,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "Pizzeria La Fornarina",
+            "adresse": "1 Rue Saint-Jean",
+            "min_dist": 329.1898728674478,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "NESS Restaurant Santé",
+            "adresse": "241 rue St-Joseph E",
+            "min_dist": 440.8404078214625,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Nguyen",
+            "adresse": "2647, 1 ave. Québec",
+            "min_dist": 473.5126432355925,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "Shogun",
+            "adresse": "98, rue St-Vallier O",
+            "min_dist": 412.3243798685689,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Deux 22",
+            "adresse": "222 Rue St-Joseph E",
+            "min_dist": 422.77062430565275,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Sushi Taxi",
+            "adresse": "813 avenue Cartier",
+            "min_dist": 399.3931410109742,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "District Saint-Joseph",
+            "adresse": "240 rue St-Joseph E.",
+            "min_dist": 445.57046607890317,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "SHAKER St-Joseph",
+            "adresse": "226 1/2 rue St-Joseph Est Québec",
+            "min_dist": 337.0002253538344,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "La Baraque Gourmande",
+            "adresse": "1700 1re Avenue",
+            "min_dist": 374.06736797699324,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "Le coin de la patate",
+            "adresse": "43 Rue St-Joseph O",
+            "min_dist": 346.6677686655035,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Patente et Machin",
+            "adresse": "82, rue St-Joseph O",
+            "min_dist": 379.4015856546352,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Pizza Salvatoré",
+            "adresse": "95, rue St-Vallier O.",
+            "min_dist": 407.5242448488099,
+            "point": {
+                "ID": "100170.1",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22937830805311,
+                    "latitude": 46.809149626368345
+                }
+            }
+        },
+        {
+            "nom": "Rôtisserie Fusée",
+            "adresse": "215, boul. Charest",
+            "min_dist": 337.23973067881263,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Royal Tandori",
+            "adresse": "1746, 1ère avenue",
+            "min_dist": 341.49669691028913,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "Resto La Mama Grilled Cheese",
+            "adresse": "1804 1 ave.",
+            "min_dist": 290.17039999080504,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        },
+        {
+            "nom": "Boîte à Pain",
+            "adresse": "289, rue St-Joseph E.",
+            "min_dist": 491.96859102470734,
+            "point": {
+                "ID": "100170.2",
+                "NOM_TOPOGRAPHIE": "Rue Arago Est",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.22898828705745,
+                    "latitude": 46.80935156161798
+                }
+            }
+        },
+        {
+            "nom": "Pho Saïgon",
+            "adresse": "1668, 1ère Avenue",
+            "min_dist": 415.80454118650385,
+            "point": {
+                "ID": "100094.1",
+                "NOM_TOPOGRAPHIE": "Boulevard des Alliés",
+                "TYPE": "Chaussée désignée",
+                "coordinates": {
+                    "longitude": -71.24003988088926,
+                    "latitude": 46.83234451991697
+                }
+            }
+        }
+    ]
+}

@@ -21,3 +21,10 @@ MERGE (pts)-[:DIST_TO_RESTO {dist: restaurant.min_dist}]->(resto)
 """
 
 neo4j_graph.run(query, json = resto_point)
+
+# query = """
+# WITH {json} AS document
+# UNWIND document.points AS pts
+# MERGE (pts:PistePts {id: pts.ID, nom: restaurant.point.NOM_TOPOGRAPHIE, type: restaurant.point.TYPE, longitude: restaurant.point.coordinates.longitude, latitude: restaurant.point.coordinates.latitude})
+# MERGE (pts)-[:DIST_TO_RESTO {dist: restaurant.min_dist}]->(resto)
+# """
