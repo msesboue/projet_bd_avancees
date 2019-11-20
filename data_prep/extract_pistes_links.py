@@ -74,7 +74,10 @@ if __name__ == "__main__":
                 "type": "Feature",
                 "geometry": {
                     "type": "Point",
-                    "coordinates": point_by_street[topology_name][point]
+                    "coordinates": {
+                        "longitude": point_by_street[topology_name][point][0],
+                        "latitude": point_by_street[topology_name][point][1]
+                    }
                 },
                 "properties": {
                     "NOM_TOPOGRAPIE": topology_name,
