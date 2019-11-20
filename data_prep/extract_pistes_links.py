@@ -1,7 +1,6 @@
 import json
-from pymongo import MongoClient
-import bson
 from math import sin, cos, sqrt, atan2, radians
+from shapely.geometry import LineString
 
 def get_distance(long1, lat1, long2, lat2):
 
@@ -21,39 +20,48 @@ def get_distance(long1, lat1, long2, lat2):
 
     distance = R * c
 
-    return distance
+    return 
+
+def get_intersection_point(seg1_long1, seg1_lat1, 
+                           seg1_long2, seg1_lat2,
+                           seg2_long1, seg2_lat1, 
+                           seg2_long2, seg2_lat2,
+                           ):
+    segment1 = LineString([(seg1_long1, seg1_lat1), (seg1_long2, seg1_lat2)])
+    segment2 = LineString([(seg2_long1, seg2_lat1), (seg2_long2, seg2_lat2)])
+    intersection = segment1.intersection(segment2)
+    if not(intersection):
+        return False
+    else:
+        return [intersection.x, intersection.y]
+
+# def get_intersections
 
 if __name__ == "__main__":
     
-    mongo_server_uri = "localhost"
-
-    MONGODB_PORT = 27017
-
-    mongo_client = MongoClient("{}:{}".format(mongo_server_uri, MONGODB_PORT))
-
-    db = mongo_client.appdb
-
     with open('../docker_app/app/data/pistes_cyclables.json', 'r', encoding='utf-8-sig') as f:
         pistes_data = json.load(f)
 
-    nb_piste = len(pistes_data)
-    # nb_piste = 5
+    # nb_piste = len(pistes_data)
+    nb_piste = 5
 
-    point_by_street = {}
+    point_by_street = {} # will be a dict(key=topo_name, value[points])
 
+    # initiate each key (topo_name) with an empty list
     for piste in range(nb_piste):
         nb_point = len(pistes_data[piste]['geometry']['coordinates'])
         street_name = pistes_data[piste]['properties']['NOM_TOPOGRAPHIE']
         for point in range(nb_point):
             point_by_street[street_name] = []
 
-
+    # add the list of point for each topo name (key)
     for piste in range(nb_piste):
         nb_point = len(pistes_data[piste]['geometry']['coordinates'])
         street_name = pistes_data[piste]['properties']['NOM_TOPOGRAPHIE']
         for point in range(nb_point):
             point_by_street[street_name].append(pistes_data[piste]['geometry']['coordinates'][point])
 
+    # remove duplicates point in each list of points
     for street in point_by_street.keys():
         nb_point = len(point_by_street[street])
         unique_points = []
@@ -66,10 +74,15 @@ if __name__ == "__main__":
     topology_names = point_by_street.keys()
 
     point_list = []
+    topo_id = 0 # initiate id for topo_names
+    point_id = 0 # initiate id for points
 
+    # create the final structure for points in a same line
     for topology_name in topology_names:
         nb_point = len(point_by_street[topology_name])
+        topo_id += 1
         for point in range(nb_point - 1):
+            point_id += 1
             point_list.append({
                 "type": "Feature",
                 "geometry": {
@@ -80,6 +93,7 @@ if __name__ == "__main__":
                     }
                 },
                 "properties": {
+                    "ID": "{}.{}".format(topo_id, point_id),
                     "NOM_TOPOGRAPIE": topology_name,
                     "linked_to": [point_by_street[topology_name][point + 1]]
                 }
@@ -92,10 +106,12 @@ if __name__ == "__main__":
                 "coordinates": point_by_street[topology_name][nb_point - 1]
             },
             "properties": {
+                "ID": "{}.{}".format(topo_id, point_id + 1),
                 "NOM_TOPOGRAPIE": topology_name,
                 "linked_to": []
             }
         })
+        point_id = 0
 
     pts_list = {}
     pts_list['points'] = point_list
