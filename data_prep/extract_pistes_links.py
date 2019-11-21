@@ -35,7 +35,53 @@ def get_intersection_point(seg1_long1, seg1_lat1,
     else:
         return [intersection.x, intersection.y]
 
-# def get_intersections
+def get_intersection_points(point_by_street):
+    
+    topo_id = 0
+    topology_names = point_by_street.keys()
+    intersection_points = []
+
+    for topology_name in topology_names:
+        nb_point = len(point_by_street[topology_name])
+        topo_id += 1
+        for point in range(nb_point - 1):
+            seg1_long1 = point_by_street[topology_name][point][0]
+            seg1_lat1 = point_by_street[topology_name][point][1]
+            seg1_long2 = point_by_street[topology_name][point+1][0]
+            seg1_lat2 = point_by_street[topology_name][point+1][1]
+
+            for key in topology_names:
+                nb_point_in = len(point_by_street[key])
+                for i in range(nb_point_in - 1):
+                    if (key == topology_name) or ((key == topology_name) and (point == i)):
+                        pass
+                    else:
+                        seg2_long1 = point_by_street[key][i][0]
+                        seg2_lat1 = point_by_street[key][i][1]
+                        seg2_long2 = point_by_street[key][i+1][0]
+                        seg2_lat2 = point_by_street[key][i+1][0]
+
+                        intersection_point = get_intersection_point(seg1_long1, seg1_lat1, 
+                                                                    seg1_long2, seg1_lat2,
+                                                                    seg2_long1, seg2_lat1, 
+                                                                    seg2_long2, seg2_lat2,)
+                        if intersection_point:
+                            intersection_points.append({
+                                "coordinates": intersection_point,
+                                "line1": {
+                                    "point1": [seg1_long1, seg1_lat1],
+                                    "point2": [seg1_long2, seg1_lat2],
+                                    "topo_name": topology_name
+                                },
+                                "line2": {
+                                    "point1": [seg2_long1, seg2_lat1],
+                                    "point2": [seg2_long2, seg2_lat2],
+                                    "topo_name": [key]
+                                }
+                            })
+    return intersection_points
+
+
 
 if __name__ == "__main__":
     
@@ -43,7 +89,7 @@ if __name__ == "__main__":
         pistes_data = json.load(f)
 
     # nb_piste = len(pistes_data)
-    nb_piste = 5
+    nb_piste = 500
 
     point_by_street = {} # will be a dict(key=topo_name, value[points])
 
@@ -71,7 +117,12 @@ if __name__ == "__main__":
         unique_points.append(point_by_street[street][nb_point-1])
         point_by_street[street] = unique_points
 
+    intersection_points = get_intersection_points(point_by_street)
+
     topology_names = point_by_street.keys()
+
+    with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
+        json.dump(intersection_points, f, ensure_ascii=False)
 
     point_list = []
     topo_id = 0 # initiate id for topo_names
