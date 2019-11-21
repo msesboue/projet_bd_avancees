@@ -30,10 +30,10 @@ def get_intersection_point(seg1_long1, seg1_lat1,
     segment1 = LineString([(seg1_long1, seg1_lat1), (seg1_long2, seg1_lat2)])
     segment2 = LineString([(seg2_long1, seg2_lat1), (seg2_long2, seg2_lat2)])
     intersection = segment1.intersection(segment2)
-    if not(intersection):
-        return False
-    else:
+    if intersection.geom_type == 'Point':
         return [intersection.x, intersection.y]
+    else:
+        return False
 
 def get_intersection_points(point_by_street):
     
@@ -59,7 +59,7 @@ def get_intersection_points(point_by_street):
                         seg2_long1 = point_by_street[key][i][0]
                         seg2_lat1 = point_by_street[key][i][1]
                         seg2_long2 = point_by_street[key][i+1][0]
-                        seg2_lat2 = point_by_street[key][i+1][0]
+                        seg2_lat2 = point_by_street[key][i+1][1]
 
                         intersection_point = get_intersection_point(seg1_long1, seg1_lat1, 
                                                                     seg1_long2, seg1_lat2,
@@ -76,7 +76,7 @@ def get_intersection_points(point_by_street):
                                 "line2": {
                                     "point1": [seg2_long1, seg2_lat1],
                                     "point2": [seg2_long2, seg2_lat2],
-                                    "topo_name": [key]
+                                    "topo_name": key
                                 }
                             })
     return intersection_points
