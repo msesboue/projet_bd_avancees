@@ -169,36 +169,36 @@ def insert_intersection_pt(intersection_points, point_list):
     ieme_inter = 0
 
     # add intersections points
-    for interserction_pt in tqdm(intersection_points):
+    for intersection_pt in tqdm(intersection_points):
         ieme_inter +=1
         point_list.append({
             "type": "Feature",
             "geometry": {
                 "type": "Point",
                 "coordinates": {
-                    "longitude": interserction_pt['coordinates'][0],
-                    "latitude": interserction_pt['coordinates'][1]
+                    "longitude": intersection_pt['coordinates'][0],
+                    "latitude": intersection_pt['coordinates'][1]
                 } 
             },
             "properties": {
                 "ID": "intersection_{}".format(ieme_inter),
                 "NOM_TOPOGRAPIE": 'intersection_{}_{}'.format(
-                                    interserction_pt['line1']['topo_name'], 
-                                    interserction_pt['line2']['topo_name']
+                                    intersection_pt['line1']['topo_name'], 
+                                    intersection_pt['line2']['topo_name']
                                     ),
             # we only consider the second point of both lines since we want to 
             # insert the intersection point in between the 2 points 
                 "linked_to": [
-                    interserction_pt['line1']['point2'],
-                    interserction_pt['line2']['point2']
+                    intersection_pt['line1']['point2'],
+                    intersection_pt['line2']['point2']
                 ]
             }
         })
 
-        long_pt1_line1 = interserction_pt['line1']['point1'][0]
-        lat_pt1_line1 = interserction_pt['line1']['point1'][1]
-        long_pt1_line2 = interserction_pt['line2']['point1'][0]
-        lat_pt1_line2 = interserction_pt['line2']['point1'][1]
+        long_pt1_line1 = intersection_pt['line1']['point1'][0]
+        lat_pt1_line1 = intersection_pt['line1']['point1'][1]
+        long_pt1_line2 = intersection_pt['line2']['point1'][0]
+        lat_pt1_line2 = intersection_pt['line2']['point1'][1]
 
         iem_pt = 0
 
@@ -214,12 +214,12 @@ def insert_intersection_pt(intersection_points, point_list):
                 next_pt_long = pt['properties']['linked_to'][0][0]
                 next_pt_lat = pt['properties']['linked_to'][0][1]
                 print(
-                    (next_pt_long == interserction_pt['line1']['point2'][0])
+                    (next_pt_long == intersection_pt['line1']['point2'][0])
                     and
-                    (next_pt_lat == interserction_pt['line1']['point2'][1])
+                    (next_pt_lat == intersection_pt['line1']['point2'][1])
                 )
 
-                point_list[iem_pt]['properties']['linked_to'] = interserction_pt['coordinates']
+                point_list[iem_pt]['properties']['linked_to'] = intersection_pt['coordinates']
 
             # insert intersection point in second line
             elif (
@@ -232,16 +232,16 @@ def insert_intersection_pt(intersection_points, point_list):
                 next_pt_long = pt['properties']['linked_to'][0][0]
                 next_pt_lat = pt['properties']['linked_to'][0][1]
                 print(
-                    (next_pt_long == interserction_pt['line2']['point2'][0])
+                    (next_pt_long == intersection_pt['line2']['point2'][0])
                     and
-                    (next_pt_lat == interserction_pt['line2']['point2'][1])
+                    (next_pt_lat == intersection_pt['line2']['point2'][1])
                 )
 
-                point_list[iem_pt]['properties']['linked_to'] = interserction_pt['coordinates']
+                point_list[iem_pt]['properties']['linked_to'] = intersection_pt['coordinates']
 
             iem_pt += 1
         
-        return point_list
+    return point_list
 
 if __name__ == "__main__":
     print("Charging 'pistes_cyclables.json' ...")
