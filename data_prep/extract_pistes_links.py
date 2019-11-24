@@ -20,7 +20,90 @@ def get_distance(long1, lat1, long2, lat2):
 
     distance = R * c
 
-    return 
+    return distance
+
+def get_point_by_street(path):
+    with open(path, 'r', encoding='utf-8-sig') as f:
+        pistes_data = json.load(f)
+
+    # nb_piste = len(pistes_data)
+    nb_piste = 500
+
+    point_by_street = {} # will be a dict(key=topo_name, value[points])
+
+    # initiate each key (topo_name) with an empty list
+    for piste in range(nb_piste):
+        nb_point = len(pistes_data[piste]['geometry']['coordinates'])
+        street_name = pistes_data[piste]['properties']['NOM_TOPOGRAPHIE']
+        for point in range(nb_point):
+            point_by_street[street_name] = []
+
+    # add the list of point for each topo name (key)
+    for piste in range(nb_piste):
+        nb_point = len(pistes_data[piste]['geometry']['coordinates'])
+        street_name = pistes_data[piste]['properties']['NOM_TOPOGRAPHIE']
+        for point in range(nb_point):
+            point_by_street[street_name].append(pistes_data[piste]['geometry']['coordinates'][point])
+
+    # remove duplicates point in each list of points
+    for street in point_by_street.keys():
+        nb_point = len(point_by_street[street])
+        unique_points = []
+        for point in range(nb_point - 1):
+            if (point_by_street[street][point] != point_by_street[street][point+1]):
+                unique_points.append(point_by_street[street][point])
+        unique_points.append(point_by_street[street][nb_point-1])
+        point_by_street[street] = unique_points
+    
+    return point_by_street
+
+def build_point_list(point_by_street):
+    topology_names = point_by_street.keys()
+    
+    point_list = []
+    topo_id = 0 # initiate id for topo_names
+    point_id = 0 # initiate id for points
+
+    # create the final structure for points in a same line
+    for topology_name in topology_names:
+        nb_point = len(point_by_street[topology_name])
+        topo_id += 1
+        for point in range(nb_point - 1):
+            point_id += 1
+            point_list.append({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": {
+                        "longitude": point_by_street[topology_name][point][0],
+                        "latitude": point_by_street[topology_name][point][1]
+                    }
+                },
+                "properties": {
+                    "ID": "{}.{}".format(topo_id, point_id),
+                    "NOM_TOPOGRAPIE": topology_name,
+                    "linked_to": [point_by_street[topology_name][point + 1]]
+                }
+            })
+        
+        point_list.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": {
+                    "longitude": point_by_street[topology_name][nb_point - 1][0],
+                    "latitude": point_by_street[topology_name][nb_point - 1][1]
+                }
+            },
+            "properties": {
+                "ID": "{}.{}".format(topo_id, point_id + 1),
+                "NOM_TOPOGRAPIE": topology_name,
+                "linked_to": []
+            }
+        })
+        point_id = 0
+
+    return point_list
 
 def get_intersection_point(seg1_long1, seg1_lat1, 
                            seg1_long2, seg1_lat2,
@@ -81,94 +164,7 @@ def get_intersection_points(point_by_street):
                             })
     return intersection_points
 
-if __name__ == "__main__":
-    
-    with open('../docker_app/app/data/pistes_cyclables.json', 'r', encoding='utf-8-sig') as f:
-        pistes_data = json.load(f)
-
-    # nb_piste = len(pistes_data)
-    nb_piste = 500
-
-    point_by_street = {} # will be a dict(key=topo_name, value[points])
-
-    # initiate each key (topo_name) with an empty list
-    for piste in range(nb_piste):
-        nb_point = len(pistes_data[piste]['geometry']['coordinates'])
-        street_name = pistes_data[piste]['properties']['NOM_TOPOGRAPHIE']
-        for point in range(nb_point):
-            point_by_street[street_name] = []
-
-    # add the list of point for each topo name (key)
-    for piste in range(nb_piste):
-        nb_point = len(pistes_data[piste]['geometry']['coordinates'])
-        street_name = pistes_data[piste]['properties']['NOM_TOPOGRAPHIE']
-        for point in range(nb_point):
-            point_by_street[street_name].append(pistes_data[piste]['geometry']['coordinates'][point])
-
-    # remove duplicates point in each list of points
-    for street in point_by_street.keys():
-        nb_point = len(point_by_street[street])
-        unique_points = []
-        for point in range(nb_point - 1):
-            if (point_by_street[street][point] != point_by_street[street][point+1]):
-                unique_points.append(point_by_street[street][point])
-        unique_points.append(point_by_street[street][nb_point-1])
-        point_by_street[street] = unique_points
-
-    intersection_points = get_intersection_points(point_by_street)
-
-    # with open('intersection_point_list.json', 'r', encoding='utf-8-sig') as f:
-    #     intersection_points = json.load(f)
-
-    topology_names = point_by_street.keys()
-
-    with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
-        json.dump(intersection_points, f, ensure_ascii=False)
-
-
-    point_list = []
-    topo_id = 0 # initiate id for topo_names
-    point_id = 0 # initiate id for points
-
-    # create the final structure for points in a same line
-    for topology_name in topology_names:
-        nb_point = len(point_by_street[topology_name])
-        topo_id += 1
-        for point in range(nb_point - 1):
-            point_id += 1
-            point_list.append({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": {
-                        "longitude": point_by_street[topology_name][point][0],
-                        "latitude": point_by_street[topology_name][point][1]
-                    }
-                },
-                "properties": {
-                    "ID": "{}.{}".format(topo_id, point_id),
-                    "NOM_TOPOGRAPIE": topology_name,
-                    "linked_to": [point_by_street[topology_name][point + 1]]
-                }
-            })
-        
-        point_list.append({
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": {
-                    "longitude": point_by_street[topology_name][nb_point - 1][0],
-                    "latitude": point_by_street[topology_name][nb_point - 1][1]
-                }
-            },
-            "properties": {
-                "ID": "{}.{}".format(topo_id, point_id + 1),
-                "NOM_TOPOGRAPIE": topology_name,
-                "linked_to": []
-            }
-        })
-        point_id = 0
-
+def insert_intersection_pt(intersection_points, point_list):
     ieme_inter = 0
 
     # add intersections points
@@ -243,36 +239,24 @@ if __name__ == "__main__":
                 point_list[iem_pt]['properties']['linked_to'] = interserction_pt['coordinates']
 
             iem_pt += 1
+        
+        return point_list
+
+if __name__ == "__main__":
+
+    point_by_street = get_point_by_street('../docker_app/app/data/pistes_cyclables.json')
+
+    intersection_points = get_intersection_points(point_by_street)
+
+    with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
+        json.dump(intersection_points, f, ensure_ascii=False)
+
+    point_list = build_point_list(point_by_street)
+
+    point_list = insert_intersection_pt(intersection_points, point_list)
 
     pts_list = {}
     pts_list['points'] = point_list
     
     with open('point_list.json', 'w', encoding='utf-8-sig') as f:
         json.dump(pts_list, f, ensure_ascii=False)
-
-    # point_dist = {}
-    # point_dist['points'] = []
-
-#     for piste in range(nb_piste):
-#         nb_point = len(pistes_data[piste]['geometry']['coordinates'])
-#         piste_id = pistes_data[piste]['properties']['ID']
-
-#         for point in range(nb_point - 1):
-
-#             long1 = pistes_data[piste]['geometry']['coordinates'][point][0]
-#             lat1 = pistes_data[piste]['geometry']['coordinates'][point][1]
-#             long2 = pistes_data[piste]['geometry']['coordinates'][point+1][0]
-#             lat2 = pistes_data[piste]['geometry']['coordinates'][point+1][1]
-
-#             point_dist['points'].append({
-#                 "ID": "{}.{}".format(piste_id, point + 1),
-#                 "dist_to_next": get_distance(long1, lat1, long2, lat2),
-#                 "extract": "{}.{}".format(piste_id, point + 2)
-#             })
-        
-#         point_dist['points'].append({
-#                 "ID": "{}.{}".format(piste_id, nb_point),
-#             })
-
-# with open('point_dist.json', 'w', encoding='utf-8-sig') as f:
-#     json.dump(point_dist, f, ensure_ascii=False)
