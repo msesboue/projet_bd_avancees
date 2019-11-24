@@ -1,4 +1,5 @@
 import json
+from tqdm import tqdm
 from math import sin, cos, sqrt, atan2, radians
 from shapely.geometry import LineString
 
@@ -26,7 +27,7 @@ def get_point_by_street(path):
     with open(path, 'r', encoding='utf-8-sig') as f:
         pistes_data = json.load(f)
 
-    # nb_piste = len(pistes_data)
+    #nb_piste = len(pistes_data)
     nb_piste = 500
 
     point_by_street = {} # will be a dict(key=topo_name, value[points])
@@ -65,7 +66,7 @@ def build_point_list(point_by_street):
     point_id = 0 # initiate id for points
 
     # create the final structure for points in a same line
-    for topology_name in topology_names:
+    for topology_name in tqdm(topology_names):
         nb_point = len(point_by_street[topology_name])
         topo_id += 1
         for point in range(nb_point - 1):
@@ -124,7 +125,7 @@ def get_intersection_points(point_by_street):
     topology_names = point_by_street.keys()
     intersection_points = []
 
-    for topology_name in topology_names:
+    for topology_name in tqdm(topology_names):
         nb_point = len(point_by_street[topology_name])
         topo_id += 1
         for point in range(nb_point - 1):
@@ -168,7 +169,7 @@ def insert_intersection_pt(intersection_points, point_list):
     ieme_inter = 0
 
     # add intersections points
-    for interserction_pt in intersection_points:
+    for interserction_pt in tqdm(intersection_points):
         ieme_inter +=1
         point_list.append({
             "type": "Feature",
@@ -243,20 +244,20 @@ def insert_intersection_pt(intersection_points, point_list):
         return point_list
 
 if __name__ == "__main__":
-
+    print("Charging 'pistes_cyclables.json' ...")
     point_by_street = get_point_by_street('../docker_app/app/data/pistes_cyclables.json')
-
+    print("Getting intersection points ...")
     intersection_points = get_intersection_points(point_by_street)
-
+    print("Serializing intersection points ...")
     with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
         json.dump(intersection_points, f, ensure_ascii=False)
-
+    print("Building points list ...")
     point_list = build_point_list(point_by_street)
-
+    print("Inserting intersection points into points list ...")
     point_list = insert_intersection_pt(intersection_points, point_list)
 
     pts_list = {}
     pts_list['points'] = point_list
-    
+    print("Serializing points list")
     with open('point_list.json', 'w', encoding='utf-8-sig') as f:
         json.dump(pts_list, f, ensure_ascii=False)
