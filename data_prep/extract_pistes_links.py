@@ -163,15 +163,27 @@ def get_intersection_points(point_by_street):
                                     "topo_name": key
                                 }
                             })
-    return intersection_points
+    
+    nb_point = len(intersection_points)
+    unique_points = []
+
+    #remove duplicate points due to the two lines forming the intersections
+    for point in range(nb_point - 1):
+        if (intersection_points[point]["coordinates"] != intersection_points[point+1]["coordinates"]):
+            unique_points.append(intersection_points[point])
+
+    unique_points.append(intersection_points[nb_point-1])
+
+    return unique_points
 
 def insert_intersection_pt(intersection_points, point_list):
     ieme_inter = 0
+    formated_intersection_pt = []
 
     # add intersections points
     for intersection_pt in tqdm(intersection_points):
         ieme_inter +=1
-        point_list.append({
+        formated_intersection_pt.append({
             "type": "Feature",
             "geometry": {
                 "type": "Point",
@@ -211,13 +223,14 @@ def insert_intersection_pt(intersection_points, point_list):
                 (pt['geometry']['coordinates']['latitude'] == lat_pt1_line1)
                 ):
                 # to check if the next point is the correct one
-                next_pt_long = pt['properties']['linked_to'][0][0]
-                next_pt_lat = pt['properties']['linked_to'][0][1]
-                print(
-                    (next_pt_long == intersection_pt['line1']['point2'][0])
-                    and
-                    (next_pt_lat == intersection_pt['line1']['point2'][1])
-                )
+                # print(pt['properties']['ID'])
+                # next_pt_long = pt['properties']['linked_to'][0][0]
+                # next_pt_lat = pt['properties']['linked_to'][0][1]
+                # print(
+                #     (next_pt_long == intersection_pt['line1']['point2'][0])
+                #     and
+                #     (next_pt_lat == intersection_pt['line1']['point2'][1])
+                # )
 
                 point_list[iem_pt]['properties']['linked_to'] = intersection_pt['coordinates']
 
@@ -228,36 +241,60 @@ def insert_intersection_pt(intersection_points, point_list):
                 (pt['geometry']['coordinates']['latitude'] == lat_pt1_line2)
                 ):
                 # to check if the next point is the correct one
-                print(pt['properties']['ID'])
-                next_pt_long = pt['properties']['linked_to'][0][0]
-                next_pt_lat = pt['properties']['linked_to'][0][1]
-                print(
-                    (next_pt_long == intersection_pt['line2']['point2'][0])
-                    and
-                    (next_pt_lat == intersection_pt['line2']['point2'][1])
-                )
+                # print(pt['properties']['ID'])
+                # next_pt_long = pt['properties']['linked_to'][0][0]
+                # next_pt_lat = pt['properties']['linked_to'][0][1]
+                # print(
+                #     (next_pt_long == intersection_pt['line2']['point2'][0])
+                #     and
+                #     (next_pt_lat == intersection_pt['line2']['point2'][1])
+                # )
 
                 point_list[iem_pt]['properties']['linked_to'] = intersection_pt['coordinates']
 
             iem_pt += 1
+
+    # add intersections points to point list
+    for pt in formated_intersection_pt:
+        point_list.append(pt)
         
     return point_list
 
 if __name__ == "__main__":
     print("Charging 'pistes_cyclables.json' ...")
     point_by_street = get_point_by_street('../docker_app/app/data/pistes_cyclables.json')
-    print("Getting intersection points ...")
-    intersection_points = get_intersection_points(point_by_street)
-    print("Serializing intersection points ...")
-    with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
-        json.dump(intersection_points, f, ensure_ascii=False)
+
+    nb_pt_by_street = 0
+    for street in point_by_street.keys():
+         nb_pt_by_street += len(point_by_street[street])
+
+    print("nb_pt_by_street : {}".format(nb_pt_by_street))
+
+    # print("Getting intersection points ...")
+    # intersection_points = get_intersection_points(point_by_street)
+    
+    # print("Serializing intersection points ...")
+    # with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
+        # json.dump(intersection_points, f, ensure_ascii=False)
+    
+    with open('intersection_point_list.json', 'r', encoding='utf-8-sig') as f:
+        intersection_points = json.load(f)
+
+    print("nb intersection point : {}".format(len(intersection_points)))
+
     print("Building points list ...")
     point_list = build_point_list(point_by_street)
+
+    print("nb point list : {}".format(len(point_list)))
+    
     print("Inserting intersection points into points list ...")
     point_list = insert_intersection_pt(intersection_points, point_list)
 
+    print("nb point list with intersection : {}".format(len(point_list)))
+
     pts_list = {}
     pts_list['points'] = point_list
+    
     print("Serializing points list")
     with open('point_list.json', 'w', encoding='utf-8-sig') as f:
         json.dump(pts_list, f, ensure_ascii=False)
