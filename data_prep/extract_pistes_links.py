@@ -81,8 +81,6 @@ def get_intersection_points(point_by_street):
                             })
     return intersection_points
 
-
-
 if __name__ == "__main__":
     
     with open('../docker_app/app/data/pistes_cyclables.json', 'r', encoding='utf-8-sig') as f:
@@ -119,10 +117,14 @@ if __name__ == "__main__":
 
     intersection_points = get_intersection_points(point_by_street)
 
+    # with open('intersection_point_list.json', 'r', encoding='utf-8-sig') as f:
+    #     intersection_points = json.load(f)
+
     topology_names = point_by_street.keys()
 
     with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
         json.dump(intersection_points, f, ensure_ascii=False)
+
 
     point_list = []
     topo_id = 0 # initiate id for topo_names
@@ -154,7 +156,10 @@ if __name__ == "__main__":
             "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": point_by_street[topology_name][nb_point - 1]
+                "coordinates": {
+                    "longitude": point_by_street[topology_name][nb_point - 1][0],
+                    "latitude": point_by_street[topology_name][nb_point - 1][1]
+                }
             },
             "properties": {
                 "ID": "{}.{}".format(topo_id, point_id + 1),
@@ -164,9 +169,84 @@ if __name__ == "__main__":
         })
         point_id = 0
 
+    ieme_inter = 0
+
+    # add intersections points
+    for interserction_pt in intersection_points:
+        ieme_inter +=1
+        point_list.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": {
+                    "longitude": interserction_pt['coordinates'][0],
+                    "latitude": interserction_pt['coordinates'][1]
+                } 
+            },
+            "properties": {
+                "ID": "intersection_{}".format(ieme_inter),
+                "NOM_TOPOGRAPIE": 'intersection_{}_{}'.format(
+                                    interserction_pt['line1']['topo_name'], 
+                                    interserction_pt['line2']['topo_name']
+                                    ),
+            # we only consider the second point of both lines since we want to 
+            # insert the intersection point in between the 2 points 
+                "linked_to": [
+                    interserction_pt['line1']['point2'],
+                    interserction_pt['line2']['point2']
+                ]
+            }
+        })
+
+        long_pt1_line1 = interserction_pt['line1']['point1'][0]
+        lat_pt1_line1 = interserction_pt['line1']['point1'][1]
+        long_pt1_line2 = interserction_pt['line2']['point1'][0]
+        lat_pt1_line2 = interserction_pt['line2']['point1'][1]
+
+        iem_pt = 0
+
+        # updates the first point of each line so they are now linked to the intersection point 
+        for pt in point_list:
+            # insert intersection point in first line
+            if (
+                (pt['geometry']['coordinates']['longitude'] == long_pt1_line1) 
+                and 
+                (pt['geometry']['coordinates']['latitude'] == lat_pt1_line1)
+                ):
+                # to check if the next point is the correct one
+                next_pt_long = pt['properties']['linked_to'][0][0]
+                next_pt_lat = pt['properties']['linked_to'][0][1]
+                print(
+                    (next_pt_long == interserction_pt['line1']['point2'][0])
+                    and
+                    (next_pt_lat == interserction_pt['line1']['point2'][1])
+                )
+
+                point_list[iem_pt]['properties']['linked_to'] = interserction_pt['coordinates']
+
+            # insert intersection point in second line
+            elif (
+                (pt['geometry']['coordinates']['longitude'] == long_pt1_line2) 
+                and 
+                (pt['geometry']['coordinates']['latitude'] == lat_pt1_line2)
+                ):
+                # to check if the next point is the correct one
+                print(pt['properties']['ID'])
+                next_pt_long = pt['properties']['linked_to'][0][0]
+                next_pt_lat = pt['properties']['linked_to'][0][1]
+                print(
+                    (next_pt_long == interserction_pt['line2']['point2'][0])
+                    and
+                    (next_pt_lat == interserction_pt['line2']['point2'][1])
+                )
+
+                point_list[iem_pt]['properties']['linked_to'] = interserction_pt['coordinates']
+
+            iem_pt += 1
+
     pts_list = {}
     pts_list['points'] = point_list
-
+    
     with open('point_list.json', 'w', encoding='utf-8-sig') as f:
         json.dump(pts_list, f, ensure_ascii=False)
 
