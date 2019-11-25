@@ -10,13 +10,12 @@ mongo_client = MongoClient("{}:{}".format(mongo_server_uri, MONGODB_PORT))
 
 db = mongo_client.appdb
 
-with open('../docker_app/app/data/pistes_cyclables.json', 'r', encoding='utf-8-sig') as f:
-    pistes_data = json.load(f)
+with open('point_list.json', 'r', encoding='utf-8-sig') as f:
+    point_list = json.load(f)
 
-# nb_piste = len(pistes_data)
-nb_piste = 5
+nb_point = len(point_list['points'])
+# nb_piste = 5
 nearby_dist = 500
-piste_length = 0
 restau_nearby = {}
 
 restau_min_dist = {}
@@ -32,48 +31,46 @@ for resto in range(len(restau_ids)):
     }
 
 
-for piste in range(nb_piste):
-    piste_length += pistes_data[piste]['properties']['LONGUEUR']
+for point in range(nb_point):
 
-    nb_point = len(pistes_data[piste]['geometry']['coordinates'])
-    piste_id = pistes_data[piste]['properties']['ID']
+    point_id = point_list['points'][point]['properties']['ID']
 
-    for point in range(nb_point):
+    point_coordinates = [
+        point_list['points'][point]['geometry']['coordinates']['longitude'],
+        point_list['points'][point]['geometry']['coordinates']['latitude']
+    ]
 
-        point_coordinates = pistes_data[piste]['geometry']['coordinates'][point]
+    restau_around = list(db.restaurant.aggregate([{ 
+                                            "$geoNear": {
+                                                "near": point_coordinates,
+                                                "distanceField": "distance",
+                                                "spherical": "true",
+                                                "distanceMultiplier": 6378100
+                                            }},
+                                            {"$project": 
+                                                {"_id":1, "properties.nom":1, "properties.adresse":1, "distance":1}
+                                            }
+                                        ])
+                                    )
 
-        restau_around = list(db.restaurant.aggregate([{ 
-                                                "$geoNear": {
-                                                    "near": point_coordinates,
-                                                    "distanceField": "distance",
-                                                    "spherical": "true",
-                                                    "distanceMultiplier": 6378100
-                                                }},
-                                                {"$project": 
-                                                    {"_id":1, "properties.nom":1, "properties.adresse":1, "distance":1}
-                                                }
-                                            ])
-                                        )
+    for resto in range(len(restau_around)):
+        resto_id = str(bson.objectid.ObjectId(restau_around[resto]['_id']))
 
-        for resto in range(len(restau_around)):
-            resto_id = str(bson.objectid.ObjectId(restau_around[resto]['_id']))
+        current_min_dist = restau_min_dist[resto_id]['min_dist']
+        new_dist = restau_around[resto]['distance']
 
-            current_min_dist = restau_min_dist[resto_id]['min_dist']
-            new_dist = restau_around[resto]['distance']
-
-            if new_dist < current_min_dist:
-                restau_min_dist[resto_id]['nom'] = restau_around[resto]['properties']['nom']
-                restau_min_dist[resto_id]['adresse'] = restau_around[resto]['properties']['adresse']
-                restau_min_dist[resto_id]['point'] = {
-                    "ID" : '{}.{}'.format(piste_id, point + 1),
-				    "NOM_TOPOGRAPHIE" : pistes_data[piste]['properties']['NOM_TOPOGRAPHIE'],
-				    "TYPE" : pistes_data[piste]['properties']['TYPE'],
-                    "coordinates": {
-                        'longitude': point_coordinates[0],
-                        'latitude': point_coordinates[1]
-                    }
+        if new_dist < current_min_dist:
+            restau_min_dist[resto_id]['nom'] = restau_around[resto]['properties']['nom']
+            restau_min_dist[resto_id]['adresse'] = restau_around[resto]['properties']['adresse']
+            restau_min_dist[resto_id]['point'] = {
+                "ID" : point_list['points'][point]['properties']['ID'],
+                "NOM_TOPOGRAPHIE" : point_list['points'][point]['properties']['NOM_TOPOGRAPIE'],
+                "coordinates": {
+                    'longitude': point_coordinates[0],
+                    'latitude': point_coordinates[1]
                 }
-                restau_min_dist[resto_id]['min_dist'] = new_dist
+            }
+            restau_min_dist[resto_id]['min_dist'] = new_dist
 
 # clean restau_min_dist from the empty values
 restau_min_dist_keys = list(restau_min_dist.keys())

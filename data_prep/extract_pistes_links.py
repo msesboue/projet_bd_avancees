@@ -55,6 +55,9 @@ def get_point_by_street(path):
                 unique_points.append(point_by_street[street][point])
         unique_points.append(point_by_street[street][nb_point-1])
         point_by_street[street] = unique_points
+
+    with open('point_by_street.json', 'w', encoding='utf-8-sig') as f:
+        json.dump(point_by_street, f, ensure_ascii=False)
     
     return point_by_street
 
@@ -82,7 +85,7 @@ def build_point_list(point_by_street):
                 },
                 "properties": {
                     "ID": "{}.{}".format(topo_id, point_id),
-                    "NOM_TOPOGRAPIE": topology_name,
+                    "NOM_TOPOGRAPHIE": topology_name,
                     "linked_to": [point_by_street[topology_name][point + 1]]
                 }
             })
@@ -98,7 +101,7 @@ def build_point_list(point_by_street):
             },
             "properties": {
                 "ID": "{}.{}".format(topo_id, point_id + 1),
-                "NOM_TOPOGRAPIE": topology_name,
+                "NOM_TOPOGRAPHIE": topology_name,
                 "linked_to": []
             }
         })
@@ -126,6 +129,7 @@ def get_intersection_points(point_by_street):
     intersection_points = []
 
     for topology_name in tqdm(topology_names):
+        print(topology_name)
         nb_point = len(point_by_street[topology_name])
         topo_id += 1
         for point in range(nb_point - 1):
@@ -194,7 +198,7 @@ def insert_intersection_pt(intersection_points, point_list):
             },
             "properties": {
                 "ID": "intersection_{}".format(ieme_inter),
-                "NOM_TOPOGRAPIE": 'intersection_{}_{}'.format(
+                "NOM_TOPOGRAPHIE": 'intersection_{}_{}'.format(
                                     intersection_pt['line1']['topo_name'], 
                                     intersection_pt['line2']['topo_name']
                                     ),
