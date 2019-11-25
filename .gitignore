@@ -3,4 +3,5 @@ docs/remise1/*.pdf
 
 docker_app/data
 
-data_prep/*.json
+data_prep/intersection_point_list.json
+data_prep/point_by_street.json
