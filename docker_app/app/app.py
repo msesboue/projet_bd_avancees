@@ -27,6 +27,13 @@ db = mongo_client.velo_epicurien
 def homepage():
     return "Bonjour et bienvenu dans notre application de vélo épicurien"
 
+@app.route("/type", methods=["GET"])
+def type():
+    restaurants_type = mongo_client.velo_epicurien.restaurants.distinct("properties.labels")
+    return jsonify({
+        "restaurants_type" : restaurants_type,
+    })
+
 @app.route("/heartbeat", methods=["GET"])
 def heartbeat():
     nb_restaurant = mongo_client.velo_epicurien.restaurants.find().count()
