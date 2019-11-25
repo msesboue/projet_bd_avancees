@@ -1,5 +1,6 @@
 import json
 from pymongo import MongoClient
+from tqdm import tqdm
 import bson
 
 mongo_server_uri = "localhost"
@@ -30,8 +31,8 @@ for resto in range(len(restau_ids)):
         'point': {}
     }
 
-
-for point in range(nb_point):
+print("extraction des points proche des restaurants")
+for point in tqdm(range(nb_point)):
 
     point_id = point_list['points'][point]['properties']['ID']
 
@@ -64,7 +65,7 @@ for point in range(nb_point):
             restau_min_dist[resto_id]['adresse'] = restau_around[resto]['properties']['adresse']
             restau_min_dist[resto_id]['point'] = {
                 "ID" : point_list['points'][point]['properties']['ID'],
-                "NOM_TOPOGRAPHIE" : point_list['points'][point]['properties']['NOM_TOPOGRAPIE'],
+                "NOM_TOPOGRAPHIE" : point_list['points'][point]['properties']['NOM_TOPOGRAPHIE'],
                 "coordinates": {
                     'longitude': point_coordinates[0],
                     'latitude': point_coordinates[1]
@@ -74,7 +75,9 @@ for point in range(nb_point):
 
 # clean restau_min_dist from the empty values
 restau_min_dist_keys = list(restau_min_dist.keys())
-for key in restau_min_dist_keys:
+
+print("nettoyage des points vides")
+for key in tqdm(restau_min_dist_keys):
     if restau_min_dist[key]['nom'] == None:
         del restau_min_dist[key]
 
@@ -84,6 +87,6 @@ restaurants_point['restaurants'] = []
 for key in restau_min_dist_keys:
     restaurants_point['restaurants'].append(restau_min_dist[key])
 
-with open('resto_min_dist_to_point.json', 'w', encoding='utf-8-sig') as f:
+with open('resto_min_dist_to_point_small.json', 'w', encoding='utf-8-sig') as f:
     json.dump(restaurants_point, f, ensure_ascii=False)
 
