@@ -270,15 +270,15 @@ if __name__ == "__main__":
 
     print("nb_pt_by_street : {}".format(nb_pt_by_street))
 
-    # print("Getting intersection points ...")
-    # intersection_points = get_intersection_points(point_by_street)
+    print("Getting intersection points ...")
+    intersection_points = get_intersection_points(point_by_street)
     
-    # print("Serializing intersection points ...")
-    # with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
-        # json.dump(intersection_points, f, ensure_ascii=False)
+    print("Serializing intersection points ...")
+    with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
+        json.dump(intersection_points, f, ensure_ascii=False)
     
-    with open('intersection_point_list.json', 'r', encoding='utf-8-sig') as f:
-        intersection_points = json.load(f)
+    # with open('intersection_point_list.json', 'r', encoding='utf-8-sig') as f:
+    #     intersection_points = json.load(f)
 
     print("nb intersection point : {}".format(len(intersection_points)))
 
