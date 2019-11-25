@@ -27,8 +27,8 @@ def get_point_by_street(path):
     with open(path, 'r', encoding='utf-8-sig') as f:
         pistes_data = json.load(f)
 
-    #nb_piste = len(pistes_data)
-    nb_piste = 500
+    nb_piste = len(pistes_data)
+    # nb_piste = 500
 
     point_by_street = {} # will be a dict(key=topo_name, value[points])
 
