@@ -28,7 +28,7 @@ def get_point_by_street(path):
         pistes_data = json.load(f)
 
     # nb_piste = len(pistes_data)
-    nb_piste = 100
+    nb_piste = 500
 
     point_by_street = {} # will be a dict(key=topo_name, value[points])
 
@@ -56,7 +56,7 @@ def get_point_by_street(path):
         unique_points.append(point_by_street[street][nb_point-1])
         point_by_street[street] = unique_points
 
-    with open('point_by_street_small.json', 'w', encoding='utf-8-sig') as f:
+    with open('point_by_street.json', 'w', encoding='utf-8-sig') as f:
         json.dump(point_by_street, f, ensure_ascii=False)
     
     return point_by_street
@@ -278,7 +278,7 @@ if __name__ == "__main__":
     intersection_points = get_intersection_points(point_by_street)
     
     print("Serializing intersection points ...")
-    with open('intersection_point_list_small.json', 'w', encoding='utf-8-sig') as f:
+    with open('intersection_point_list.json', 'w', encoding='utf-8-sig') as f:
         json.dump(intersection_points, f, ensure_ascii=False)
     
     # with open('intersection_point_list.json', 'r', encoding='utf-8-sig') as f:
@@ -300,5 +300,5 @@ if __name__ == "__main__":
     pts_list['points'] = point_list
     
     print("Serializing points list")
-    with open('point_list_small.json', 'w', encoding='utf-8-sig') as f:
+    with open('point_list.json', 'w', encoding='utf-8-sig') as f:
         json.dump(pts_list, f, ensure_ascii=False)
