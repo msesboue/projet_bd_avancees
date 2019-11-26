@@ -34,10 +34,10 @@ if __name__ == "__main__":
 
     neo4j_graph = Graph("localhost:{}".format(NEO4J_PORT), auth=(user,password))
 
-    with open('resto_min_dist_to_point_small.json', 'r', encoding='utf-8-sig') as f:
+    with open('resto_min_dist_to_point.json', 'r', encoding='utf-8-sig') as f:
         resto_point = json.load(f)
 
-    with open('point_list_small.json', 'r', encoding='utf-8-sig') as f:
+    with open('point_list.json', 'r', encoding='utf-8-sig') as f:
             point_list = json.load(f)
 
     print("insertion des points")
@@ -95,7 +95,8 @@ if __name__ == "__main__":
                                 )
         point_node = matcher.match(
                                     "PistePoint",
-                                    id=resto['point']["ID"]
+                                    longitude=resto['point']['coordinates']['longitude'],
+                                    latitude=resto['point']['coordinates']['latitude']
                                 )
         distance = resto["min_dist"]
         link = Relationship(point_node, "way_to_resto", resto_node, distance=distance)
