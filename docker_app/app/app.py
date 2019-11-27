@@ -79,7 +79,7 @@ def parcours(starting_point, maximum_length, number_of_stops, type):
 
 @app.route("/readme", methods=['GET'])
 def get_readme():
-    """
+    readme = """
     # Bienvenu dans l'application du vélo épicurien !
 
     J'espère que vous êtes prêt parce ce que vous allez rentrer en roulant !
@@ -168,6 +168,7 @@ def get_readme():
         ]
     ```
     """
+    return readme
 
 if __name__ == "__main__":
     app.run("0.0.0.0", APP_PORT, debug=True)
