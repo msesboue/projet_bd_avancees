@@ -34,6 +34,19 @@ def type():
         "restaurants_type" : restaurants_type,
     })
 
+@app.route("/starting-point", methods=['GET'])
+def get_starting_point(maximum_length, type):
+
+    return jsonify({
+                "starting_point" : {
+                    "type": "GeoPoint", 
+                    "coordinates": {
+                        "latitude":"un float", 
+                        "longitude":"un float"
+                    }
+                }
+            })
+
 @app.route("/heartbeat", methods=["GET"])
 def heartbeat():
     nb_restaurant = mongo_client.velo_epicurien.restaurants.find().count()
@@ -48,6 +61,113 @@ def heartbeat():
         "nb_restaurants": nb_restaurant,
         "total_path_length": distance[0]['total_dist']
     })
+
+@app.route("/parcours", methods=["GET"])
+def parcours(starting_point, maximum_length, number_of_stops, type):
+    restaurant_set = db.restaurants.find({
+        "properties.labels": {
+            "$in":type
+        }
+    },
+    {
+        "_id":0,
+        "properties.nom": 1,
+        "properties.adresse": 1
+    })
+    
+    return "Désolé, cette fonctionnalité est en cours de construction"
+
+@app.route("/readme", methods=['GET'])
+def get_readme():
+    """
+    # Bienvenu dans l'application du vélo épicurien !
+
+    J'espère que vous êtes prêt parce ce que vous allez rentrer en roulant !
+
+    ## Home page
+    
+    ```Bash
+        @GET /heartbeat
+
+        returns: "Bonjour et bienvenu dans notre application de vélo épicurien"
+    ```
+
+    ## Des statistiques de bases sur les bases de données
+
+    ```Bash
+        @GET /heartbeat
+
+        returns:
+        {
+            "nb_restaurants":int,
+            "total_path_length":float
+        }
+    ```
+
+    ## README
+    
+    ```Bash
+        @GET /readme
+        
+        returns: Ce README en markdown
+    ```
+
+    ## Les Types de Restaurants
+
+    ```Bash
+        @GET /type
+
+        returns:
+        [
+            str,
+            str,
+            str,
+            ...
+        ]
+    ```
+
+    ## Obtenir un point de départ
+
+    ```Bash
+        @GET /starting-point
+        {
+            "maximum_length": int (en mètre),
+            "type": [str, str, ... ]
+        }
+
+        returns:
+        {
+            "starting_point" : {"type":"Point", "coordinates":{"latitude":float, "longitude":float}}
+        }
+    ```
+
+    ## Générer un parcours
+
+    ```Bash
+        @GET /parcours
+        {
+            "starting_point" : {"type":"Point", "coordinates":{"latitude":float, "longitude":float}},
+            "maximum_length": int (en mètre),
+            "number_of_stops": int,
+            "type": [str, str, ... ]
+        }
+
+        returns:
+        [
+            {
+                "segment_id":1,
+                path: {type:"LineString", "coordinates":{"latitude":float, "longitude":float}},
+                restaurant: {
+                    "name": string,
+                    "type": string,
+                    "cote": float,
+            },{
+                "segment_id":2,
+                ....   
+            }
+        ]
+    ```
+    """
 
 if __name__ == "__main__":
     app.run("0.0.0.0", APP_PORT, debug=True)
