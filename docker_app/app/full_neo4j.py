@@ -34,10 +34,10 @@ if __name__ == "__main__":
 
     neo4j_graph = Graph("localhost:{}".format(NEO4J_PORT), auth=(user,password))
 
-    with open('resto_min_dist_to_point.json', 'r', encoding='utf-8-sig') as f:
+    with open('./app/data/resto_min_dist_to_point.json', 'r', encoding='utf-8-sig') as f:
         resto_point = json.load(f)
 
-    with open('point_list.json', 'r', encoding='utf-8-sig') as f:
+    with open('./app/data/point_list.json', 'r', encoding='utf-8-sig') as f:
             point_list = json.load(f)
 
     print("insertion des points")
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         )
         insert_points.create(point_node)
     insert_points.commit()
-
+    
     print("insertion des restaurants")
     insert_resto = neo4j_graph.begin()
     for resto in tqdm(resto_point['restaurants']):
@@ -62,7 +62,7 @@ if __name__ == "__main__":
                             )
         insert_resto.create(resto_node)
     insert_resto.commit()
-
+    
     print("liaison des points")
 
     link_points = neo4j_graph.begin()
@@ -79,28 +79,31 @@ if __name__ == "__main__":
                 distance = get_distance(node_long, node_lat, node_to_link_long, node_to_link_lat)
                 link_1 = Relationship(node, "way", node_to_link, distance=distance)
                 link_2 = Relationship(node_to_link, "way", node, distance=distance)
-                link_points.create(link_1)
-                link_points.create(link_2)
+                link_points.merge(link_1)
+                link_points.merge(link_2)
     link_points.commit()
 
     print("liaison des restaurants")
 
     link_resto = neo4j_graph.begin()
     for resto in tqdm(resto_point['restaurants']):
+        print(resto)
         matcher = NodeMatcher(neo4j_graph)
         node_resto = matcher.match(
                                 "Restaurant", 
                                 nom=resto['nom'],
                                 adresse=resto['adresse']
-                                )
+                                ).first()
         point_node = matcher.match(
                                     "PistePoint",
                                     longitude=resto['point']['coordinates']['longitude'],
                                     latitude=resto['point']['coordinates']['latitude']
-                                )
+                                ).first()
         distance = resto["min_dist"]
-        link = Relationship(point_node, "way_to_resto", resto_node, distance=distance)
-        link_resto.create(link)
+        link_1 = Relationship(point_node, "way", node_resto, distance=distance)
+        link_2 = Relationship(node_resto, "way", point_node, distance=distance)
+        link_resto.merge(link_1)
+        link_resto.merge(link_2)
     link_resto.commit()
 
 
