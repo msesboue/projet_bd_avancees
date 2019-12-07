@@ -1,0 +1,244 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{hyperref} % lien tableofcontents + url
+\usepackage{graphicx} % pour les images
+\usepackage{float} % pour le [H] des figures
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\usepackage{subcaption}
+
+\usepackage{csvsimple}
+
+\begin{document}
+
+\title{Rapport technique \\ Application Vélo Épicurien}
+\author{MANZAMBI Sean \\ SESBOÜÉ Matthias \\ Martin Sasseville}
+
+\maketitle
+
+\begin{abstract}
+    Le présent rapport décrit la réalisation de l'application Vélo épicurien. Cette application permet à un usager, amateur de vélo et de bonne bouffe, d'obtenir un parcours, via les pistes cyclables, lui permettant d'effectuer un certain nombre d'arrêts dans des restaurants proposant ses types de cuisine préférés.
+\end{abstract}
+
+\section{Présentation des données utilisées pour le projet}
+
+\subsection{Source et taille des données}
+
+    Afin de supporter l'application, il est essentiel de disposer de données sources exploitables qui permettront d'obtenir un parcours cyclable ainsi que des restaurants à proximité de ces pistes cyclables. 
+    
+    Dans un premier temps, les données pour les pistes cyclables seront obtenues via \href{https://www.donneesquebec.ca/recherche/fr/dataset/vque_24}{les données publiques de la ville de Québec}. Cette base de données contient XXX points géographiques délimitant l'ensemble des pistes cyclables sur le territoire de la ville de Québec. Pour les données relatives aux restaurants, elles seront obtenues par une méthode d'extraction de données (web scrapping) à partir du \href{https://www.restoquebec.ca/}{site web de Resto Québec}. La base de données créée contient XXX restaurants répartis tout autour de la ville de Québec.
+
+    Les données sont extraites au format GeoJSON afin de faciliter leur intégration dans les bases de données, qui gères nativement ce format de données (voir \href{https://geojson.org/}{le site geojson.org} pour les détails de ce format).
+
+\subsection{Analyse descriptive des données}
+
+    Ces bases de données ont été choisies car elles contiennent les informations essentielles au bon fonctionnement de l'application. En effet, celle-ci doit pouvoir retourner une série de lieux (nom du lieu et/ou ses coordonnées) ordonnancés afin de décrire un trajet d'une longueur maximale spécifiée, ainsi que les restaurants (nom du restaurant et/ou ses coordonnées) situés  sur ce parcours pour le nombre d'arrêts souhaités. 
+    
+    Les bases de données supportant cette application doivent donc contenir à minima les informations suivantes :
+
+    \begin{itemize}
+        \item Pour les pistes cyclables
+        \begin{itemize}
+            \item le nom du lieu
+            \item les coordonnées géographiques de ce lieu
+        \end{itemize}
+        \item Pour les restaurants
+        \begin{itemize}
+            \item nom
+            \item adresse
+            \item coordonnées géographiques
+            \item type(s) de cuisine
+        \end{itemize}
+    \end{itemize}
+
+    Les données GeoJSON extraites contiennent, en plus des types de géométries et des coordonnées des points, les informations suivantes :
+     \begin{itemize}
+         \item Pour les pistes cyclables
+         \begin{itemize}
+             \item nom de la topographie (nom de rue, avenue, boulevard ...)
+             \item type de voie
+             \item si cette voie est à sens unique ou non
+             \item la longueur de la voie
+         \end{itemize}
+         \item Pour les restaurants
+         \begin{itemize}
+             \item nom du restaurant
+             \item adresse
+             \item prix moyen du restaurant sous forme d'une échelle allant de 1 à 4 symboles \$
+             \item les types de nourritures servis dans le restaurant
+         \end{itemize}
+     \end{itemize}
+
+\section{Technologies utilisées pour le projet}
+
+\subsection{Langage de programmation et bibliothèques}
+
+    Le langage de programmation qui a été choisi pour l'application est le Python, dans sa version 3.6. C'est un langage très utilisé qui propose un grand nombre de bibliothèques matures, qui seront utiles pour implémenter les différentes interfaces nécessaires.
+
+    Les bibliothèques suivantes sont utilisées :
+
+    \begin{itemize}
+        \item Flask est un framework open-source de développement web en Python. Son but principal est d'être léger, afin de garder la souplesse de la programmation Python, associé à un système de templates. Il permet de développer rapidemment et facilement une API web pour interfacer avec les bases de données.
+        \item Pymongo est l'API python qui met à disposition tous les outils nécessaires pour faire des requêtes sur une base de données MongoDB.
+        \item Py2neo est l'API python qui met à disposition tous les outils nécessaires pour faire des requêtes sur une base de données Neo4J.
+        \item json est un module python permettant de manipuler les fichiers au format JSON. 
+    \end{itemize}
+
+\subsection{Bases de données}
+
+    La base de donnée MongoDB orientée document est utilisée pour stocker les informations concernant les restaurants. Les données géographiques, des restaurants ainsi que celles des pistes cyclables, seront stockées dans la base de données orientée graphe, Neo4J.
+
+\subsection{Modélisation des données en BD}
+
+\subsubsection{Base de données MongoDB}
+
+    Les données concernants les restaurants sont importées telles quelles dans la base de données MongoDB. Notons que seules les données relative au restaurant lui même et non relatives à sa position sont importées. La base de données MongoDB ne contient que ces données.
+
+\subsubsection{Base de données Neo4J}
+
+    Les données géographiques demande un étape de pré traitement. Dans un premier temps les points des pistes cyclables sont extrait. Dans le fichier GeoJSON, ces derniers sont intégrés à des formes géographiques de type "LineString" qui se recoupent parfois. L'extraction de ces points permet d'éliminer les doublons, d'intégrer ces points dans les sommets du graphe de la base de données orientée graphe, en plus de faire des calculs à partir de ces points.
+
+    Ces points permettent ensuite de calculer, d'une part les intersections entre les lignes brisées que forme les suites de points, et ainsi d'introduire de nouveaux points essentiels. D'autre par de calculer, à partir de l'ensemble des points, quel restaurant est plus proche de quel point (dans une limite de 500 mètres d'un point). Ainsi, chaque restaurant est assigné à un seul point.
+    
+    Pour résumer, la base de données Neo4J contient :
+
+    \begin{itemize}
+        \item Un ensemble de sommets représentant les points des pistes cyclables. Ces sommets ont pour propriétés une longitude, une latitude ainsi qu'un identifiant unique et le nom de la topographie à laquelle le point appartient (nom de la rue, avenue, piste cyclable \dots)
+        \item Les sommets de cet ensemble sont reliés par des arrêtes bidirectionnelles s'il existe une route entre les points. Ces arrêtes ont un attribut "distance" contenant la distance entre les deux points
+        \item Un ensemble de sommets représentant les points des restaurants. Ces sommets ont pour attribut, le nom et l'adresse du restaurant qui servent à reconnaître le restaurant de façon unique
+        \item Ces sommets "restaurant" sont reliés à leur point de piste cyclable le plus proche.
+    \end{itemize}
+
+\section{Algorithme permettant de produire les parcours}
+
+\subsection{Communication des valeurs calculées entre les bases de données}
+
+    L'orsque l'utilisateur sélectionne la liste des types de restaurants où il souhaite manger sur son parcours, l'ensemble des noms de restaurant servant de la nourriture d'un type de cette liste est extrait depuis la base de données MongoDB contenant les informations sur les restaurants. Cet ensemble de restaurants est utilisé ensuite en paramètre dans la requête faite à la base de données Neo4J pour extraire le meilleur chemin.
+    Une fois la liste des restaurants choisis il est facile d'extraire de la MongoDB les informations complémentaires souhaitées.
+
+\subsection{Calcul permettant de trouver le parcours épicurien le plus intéressant pour l'usager}
+
+    Dans un premier temps, un point de départ est extrait de manière aléatoire à partir de chemins calculés correspondants au contraintes de distance maximale à parcourir et du type de nourriture que l'utilisateur souhaite manger.
+    Ce point de départ est ensuite utilisé pour calculer un parcours qui part d'un point situé dans un rayon de 500 mètres autour du point de départ. Pour finir, l'extraction de la liste de points formant le parcours est laissé au programme de la base de données Neo4J. Littéralement, nous demandons à Neo4J, via une requête Cypher, "extrait une liste de points reliés deux à deux, dont le premier point est le point de départ, certains de ces points sont reliés à des restaurants de l'ensemble spécifié et la somme des distances entre ces points est inférieure à la distance maximale".  
+
+\section{Documentationd de l'API}
+
+    L'API propose actuellement les requêtes suivantes via des méthodes GET:
+
+    Page d'acceuil :
+
+    \begin{lstlisting}
+        @GET /
+
+        returns: "Bonjour et bienvenu dans notre application de velo epicurien"
+    \end{lstlisting}
+
+    Statistiques de bases sur les bases de données :
+
+    \begin{lstlisting}
+        @GET /heartbeat
+
+        returns:
+        {
+            "nb_restaurants":int,
+            "total_path_length":float
+        }
+    \end{lstlisting}
+
+    Le README correspondant à cette documentation :
+
+    \begin{lstlisting}
+        @GET /readme
+        
+        returns: Cette documentation en markdown
+    \end{lstlisting}
+
+    Liste des types de restaurant existants :
+    
+    \begin{lstlisting}
+        @GET /type
+
+        returns:
+        [
+            str,
+            str,
+            str,
+            ...
+        ]
+    \end{lstlisting}
+
+    Obtenir un point de départ : 
+
+    Dans le navigateur, on met les paramètres dans l'URL, maximun\_lenght='distance' et type='liste de types de restaurant'. Les types sont séparés par le signe '+', exemple http://localhost:8080/starting-point?maximum\_length=100\&type=Sandwichs+Casse-croute
+
+    \begin{lstlisting}
+        @GET /starting-point
+        {
+            "maximum\_length": int (en metre),
+            "type": [str, str, ... ]
+        }
+
+        returns:
+        {
+            "starting\_point" : {"type":"Point", "coordinates":{"latitude":float, "longitude":float}}
+        }
+    \end{lstlisting}
+
+
+    Générer un parcours :
+    
+    Dans le navigateur, on sépare les types pas des symboles '+' dans l'url, exemple http://localhost:8080/parcours?maximum\_length=500\&type=Sandwichs+Poutine\&number\_of\_stops=1
+        
+    \begin{lstlisting}
+        @GET /parcours
+        {
+            "starting\_point" : {"type":"Point", "coordinates":{"latitude":float, "longitude":float}},
+            "maximum\_length": int (en metre),
+            "number\_of_stops": int,
+            "type": [str, str, ... ]
+        }
+
+        returns:
+        [
+            {
+                "segment\_id":1,
+                path: {type:"LineString", "coordinates":{"latitude":float, "longitude":float}},
+                restaurant: {
+                    "name": string,
+                    "type": string,
+                    "cote": float,
+            },{
+                "segment\_id":2,
+                ....   
+            }
+        ]
+    \end{lstlisting}
+    
+\section{Plan d'expansion}
+
+\subsection{Point de départ}
+
+    Le MVP présenté ici est une preuve de concept. Il peut être amélioré de beaucoup de manières différentes.
+
+    Il est a noter que actuellement seulement une partie des données à dispositions est utilisée. En effet, pour l'instant, les informations comme le type de voie, le sens unique ou non d'une voie, l'ordre de prix d'un restaurant \dots ne sont pas utilisées.
+
+    L'API présentée ici se veut simple et ne fournie que les fonctionnalités minimales. Dans le futur, plus de fonctionnalités seront ajoutées.
+
+\subsection{Gestion de l'évolution des volumes de données (Scalabilité)}
+
+    Avant d'apporter de nouvelles fonctionnalités, il faut s'assurer que l'application sera capable de répondre aux requêtes d'un nombre croissant d'utilisateur. Pour cela, plusieurs évolution à mettre en place ont été identifiées, que ce soit au niveau de la modélisation des données comme au niveau de l'architecture logicielle.
+
+    La modélisation des données peut être améliorée de deux manières :
+    
+    \begin{itemize}
+        \item Un identifiant unique doit être créer pour chaque restaurant et partagé entre la base de données MongoDB et celle Neo4J. Ce dernier permettra de réellement stocker toutes les informations relatives aux restaurants, autre que les coordonnées, dans la MongoDB. Et ainsi éviter de dupliquer des données et alléger la quantité de données dans la Neo4J.
+        \item Toujours dans un objectif d'optimisation des données stockées dans la Neo4J, une réorganisation des points peut être faites. En effet, actuellement chaque point est stocké comme un sommet mais cela n'est pas util pour tous. Les points ne servant que d'intermédiaires entre deux points ne nécessite pas de créer un sommet et leurs coordonnées peuvent simplement être stockées sous forme d'une liste dans un attribut de l'arrête liant les deux extrémités d'une ligne. Cela est donc valable pour tous les points qui ne sont n'y reliés à un restaurant, ni une intersection, c'est à dire reliés à plus de deux autres points.
+    \end{itemize}
+
+    D'un point de vue architectural
+
+\subsection{Fonctionnalités additionnelles envisagées}
+
+\end{document}
