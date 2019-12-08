@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt]{article}
 \usepackage{hyperref} % lien tableofcontents + url
 \usepackage{graphicx} % pour les images
 \usepackage{float} % pour le [H] des figures
@@ -10,6 +10,11 @@
 \usepackage{subcaption}
 
 \usepackage{csvsimple}
+
+\topmargin -1.1in 
+\textheight 9.7in
+\setlength{\textwidth}{7.5in}
+\oddsidemargin = -.5in
 
 \begin{document}
 
@@ -28,7 +33,7 @@
 
     Afin de supporter l'application, il est essentiel de disposer de données sources exploitables qui permettront d'obtenir un parcours cyclable ainsi que des restaurants à proximité de ces pistes cyclables. 
     
-    Dans un premier temps, les données pour les pistes cyclables seront obtenues via \href{https://www.donneesquebec.ca/recherche/fr/dataset/vque_24}{les données publiques de la ville de Québec}. Cette base de données contient XXX points géographiques délimitant l'ensemble des pistes cyclables sur le territoire de la ville de Québec. Pour les données relatives aux restaurants, elles seront obtenues par une méthode d'extraction de données (web scrapping) à partir du \href{https://www.restoquebec.ca/}{site web de Resto Québec}. La base de données créée contient XXX restaurants répartis tout autour de la ville de Québec.
+    Dans un premier temps, les données pour les pistes cyclables seront obtenues via \href{https://www.donneesquebec.ca/recherche/fr/dataset/vque_24}{les données publiques de la ville de Québec}. Cette base de données contient $30949$ points géographiques délimitant l'ensemble des plus de de $485$ kilomètres de pistes cyclables sur le territoire de la ville de Québec. Pour les données relatives aux restaurants, elles seront obtenues par une méthode d'extraction de données (web scrapping) à partir du \href{https://www.restoquebec.ca/}{site web de Resto Québec}. La base de données créée contient $2496$ restaurants répartis tout autour de la ville de Québec.
 
     Les données sont extraites au format GeoJSON afin de faciliter leur intégration dans les bases de données, qui gères nativement ce format de données (voir \href{https://geojson.org/}{le site geojson.org} pour les détails de ce format).
 
@@ -182,7 +187,13 @@
 
         returns:
         {
-            "starting\_point" : {"type":"Point", "coordinates":{"latitude":float, "longitude":float}}
+            "starting\_point" : {
+                                    "type":"Point", 
+                                        "coordinates":{
+                                            "latitude":float, 
+                                            "longitude":float
+                                    }
+                                }
         }
     \end{lstlisting}
 
@@ -194,7 +205,13 @@
     \begin{lstlisting}
         @GET /parcours
         {
-            "starting\_point" : {"type":"Point", "coordinates":{"latitude":float, "longitude":float}},
+            "starting\_point" : {
+                                    "type":"Point", 
+                                    "coordinates":{
+                                        "latitude":float, 
+                                        "longitude":float
+                                    }
+                                },
             "maximum\_length": int (en metre),
             "number\_of_stops": int,
             "type": [str, str, ... ]
@@ -204,12 +221,19 @@
         [
             {
                 "segment\_id":1,
-                path: {type:"LineString", "coordinates":{"latitude":float, "longitude":float}},
+                path: {
+                    type:"LineString", 
+                    "coordinates":{
+                        "latitude":float, 
+                        "longitude":float
+                    }
+                },
                 restaurant: {
                     "name": string,
                     "type": string,
                     "cote": float,
-            },{
+            },
+            {
                 "segment\_id":2,
                 ....   
             }
@@ -228,17 +252,41 @@
 
 \subsection{Gestion de l'évolution des volumes de données (Scalabilité)}
 
-    Avant d'apporter de nouvelles fonctionnalités, il faut s'assurer que l'application sera capable de répondre aux requêtes d'un nombre croissant d'utilisateur. Pour cela, plusieurs évolution à mettre en place ont été identifiées, que ce soit au niveau de la modélisation des données comme au niveau de l'architecture logicielle.
+    Avant d'apporter de nouvelles fonctionnalités, il faut s'assurer que l'application sera capable de répondre aux requêtes d'un nombre croissant d'utilisateurs. Pour cela, plusieurs évolutions à mettre en place ont été identifiées, que ce soit au niveau de la modélisation des données comme au niveau de l'architecture logicielle.
 
     La modélisation des données peut être améliorée de deux manières :
     
     \begin{itemize}
-        \item Un identifiant unique doit être créer pour chaque restaurant et partagé entre la base de données MongoDB et celle Neo4J. Ce dernier permettra de réellement stocker toutes les informations relatives aux restaurants, autre que les coordonnées, dans la MongoDB. Et ainsi éviter de dupliquer des données et alléger la quantité de données dans la Neo4J.
-        \item Toujours dans un objectif d'optimisation des données stockées dans la Neo4J, une réorganisation des points peut être faites. En effet, actuellement chaque point est stocké comme un sommet mais cela n'est pas util pour tous. Les points ne servant que d'intermédiaires entre deux points ne nécessite pas de créer un sommet et leurs coordonnées peuvent simplement être stockées sous forme d'une liste dans un attribut de l'arrête liant les deux extrémités d'une ligne. Cela est donc valable pour tous les points qui ne sont n'y reliés à un restaurant, ni une intersection, c'est à dire reliés à plus de deux autres points.
+        \item Un identifiant unique doit être créé pour chaque restaurant et partagé entre la base de données MongoDB et celle Neo4J. Ce dernier permettra de réellement stocker toutes les informations relatives aux restaurants, autres que les coordonnées, dans la MongoDB. Et ainsi éviter de dupliquer des données et alléger la quantité de données dans la Neo4J.
+        \item Toujours dans un objectif d'optimisation des données stockées dans la Neo4J, une réorganisation des points peut être faites. En effet, actuellement chaque point est stocké comme un sommet mais cela n'est pas utile pour tous. Les points ne servant que d'intermédiaires entre deux points ne nécessitent pas de créer un sommet, et leurs coordonnées peuvent simplement être stockées sous forme d'une liste dans un attribut de l'arrête liant les deux extrémités d'une ligne. Cela est donc valable pour tous les points qui ne sont ni reliés à un restaurant, ni une intersection, c'est à dire reliés à plus de deux autres points.
     \end{itemize}
 
-    D'un point de vue architectural
+    D'un point de vue architectural les possibilités suivantes sont considérées :
+
+    \begin{itemize}
+        \item L'application est tout d'abord lancée en phase de test sur la ville de Québec. Un seul centre de données est actuellement nécessaire, positionné le plus proche possible de la ville de Québec étant donné que la majorité des utilisateurs seront dans cette zone.
+        \item En terme réplication, une approche "single-leader" avec réplication asynchrone est considérée. En effet la majorité des requêtes seront des lectures. Celles en écritures seront principalement l'ajout de nouveaux points pour les pistes cyclables ou les restaurants Si un utilisateur ne reçoit pas immédiatement un chemin incluant ces changements, cela n'est pas critique.
+        \item En fonction du développement spatial de l'application, une approche "multileader" toujours avec réplication asynchrone pourra être considérée à mesure de la création de nouveaux centres de données. Ces centres seront placés en fonction des zones (par exemple, Amérique centrale, Amérique du nord \dots) pour répartir les flux de données. Cette répartition par zone permettra également d'optimizer la réplication des données par zone. C'est à dire de répliquer en priorité les modifications faites sur une zone dans son cluster correspondant.
+        \item Lors de l'expension, la position de ces centres de données devient important au niveau de la gestion des données personnelles. En effet, actuellement chaque pays impose des contraintes différentes sur la gestion de ces données. Le fait d'avoir à minima un centre différent par pays permet d'appliquer ses contraintes de manière plus précise. 
+        \item Cette architecture sera à adapter lorsqu'une gestion de profiles utilisateurs, file d'actualité, ou encore d'évaluation des restaurants ou des parcours, sera mise en place.
+        \item Lorsque la quantité de données à gérer atteindra un volume trop important une approche de partionnement par hash de clés sera considéré. Les requêtes ne portent pas sur des plages de données mais plutôt sur des données précises.
+        \item Avec l'ajout de nouvelles fonctionnalités comme la gestion des utilisateurs ou la proposition des chemins personalisés, une approche de partionnement sur les indexes secondaires par terme sera alors considérée. Cela permettra de répondre de manière optimisée à des requêtes comme "trouve tous les restaurants que cet utilisateur a déjà visité". Encore une fois les écritures sont moins fréquentes que les lectures, il est donc plus intéressant d'optimiser le partionnement sur les lectures. 
+    \end{itemize}
 
 \subsection{Fonctionnalités additionnelles envisagées}
+
+    \subsubsection{Fonctionnalités de base}
+
+        Dans un premier temps il est primordiale d'ajouter une gestion de profiles utilisateurs ainsi qu'un système de géolocalisation. Cela permettra d'offrir un service de bien meilleure qualité, plus personalisé, et produira des données essentielles pour l'utilisation de méthodes d'analyses de données nécessaires à cette personnalisation du service.
+
+        Une fois les profiles utilisateurs créés, sera ajouté un système de notation des restaurants et une liste des restaurants déjà visités, ainsi que des trajets déjà effectués, seront conservées pour chaque utilisateur.
+
+    \subsubsection{Fonctionnalités à plus long terme}
+
+        À plus long terme, un sytème de recommendation équivalent à celui de Netflix pour ces films, sera implémenté pour proposer par défaut des trajets aux utilisateur en fonction de leurs trajets précédents et des types de nourriture qu'ils préfèrent. Ces recommendations se baserons dans un premier temps, sur la longueur maximale des trajets précédemments effectués par l'utilisateur, ainsi que sur ces types de nourriture préférés et de la polarité des commentaires laissés sur les restaurants. 
+
+        L'idée principale est de faire évoluer l'application d'un simple outil à une réseau social. Une fois les fonctionnalités précédentes implémentées et stables, un fil d'actualité sera ajouté, et les utilisateurs pourrons ajouter des amis. Cela permettra d'une part aux restaurateurs de proposer des rabais ou des évènements spéciaux. Et d'autre part, aux utilisateurs de partager leurs trajets et leurs commentaires sur ceux-ci. Ces informations seront ajoutées au fil d'actualité.
+
+        Enfin, des méthodes de gamifications seront utilisées et un tableau des scores sera ajouté présentant une balance entre les calories consomméees par la pratique du vélo et celles emmagasinées par le consommation de nourriture.
 
 \end{document}
