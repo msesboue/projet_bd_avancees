@@ -107,7 +107,7 @@
 
     Ces points permettent ensuite de calculer, d'une part les intersections entre les lignes brisées que forme les suites de points, et ainsi d'introduire de nouveaux points essentiels. D'autre par de calculer, à partir de l'ensemble des points, quel restaurant est plus proche de quel point (dans une limite de 500 mètres d'un point). Ainsi, chaque restaurant est assigné à un seul point.
     
-    Pour résumer, la base de données Neo4J contient :
+    Pour résumer, la base de données Neo4J contient comme présenté dans la figure \emph{figure~\ref{actual_neo_model} page~\pageref{actual_neo_model}} :
 
     \begin{itemize}
         \item Un ensemble de sommets représentant les points des pistes cyclables. Ces sommets ont pour propriétés une longitude, une latitude ainsi qu'un identifiant unique et le nom de la topographie à laquelle le point appartient (nom de la rue, avenue, piste cyclable \dots)
@@ -115,6 +115,12 @@
         \item Un ensemble de sommets représentant les points des restaurants. Ces sommets ont pour attribut, le nom et l'adresse du restaurant qui servent à reconnaître le restaurant de façon unique
         \item Ces sommets "restaurant" sont reliés à leur point de piste cyclable le plus proche.
     \end{itemize}
+        
+    \begin{figure}[h]
+        \centering
+        \includegraphics[scale=1]{images/actual_neo_model.pdf}
+        \caption{\label{actual_neo_model} Visualisation du modèle de données de la BD Neo4J}
+    \end{figure}
 
 \section{Algorithme permettant de produire les parcours}
 
@@ -255,10 +261,16 @@
     Avant d'apporter de nouvelles fonctionnalités, il faut s'assurer que l'application sera capable de répondre aux requêtes d'un nombre croissant d'utilisateurs. Pour cela, plusieurs évolutions à mettre en place ont été identifiées, que ce soit au niveau de la modélisation des données comme au niveau de l'architecture logicielle.
 
     La modélisation des données peut être améliorée de deux manières :
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[scale=1]{images/updated_neo_model.pdf}
+        \caption{\label{updated_neo_model} Modèle de données optimisé pour la BD Neo4J}
+    \end{figure}
     
     \begin{itemize}
         \item Un identifiant unique doit être créé pour chaque restaurant et partagé entre la base de données MongoDB et celle Neo4J. Ce dernier permettra de réellement stocker toutes les informations relatives aux restaurants, autres que les coordonnées, dans la MongoDB. Et ainsi éviter de dupliquer des données et alléger la quantité de données dans la Neo4J.
-        \item Toujours dans un objectif d'optimisation des données stockées dans la Neo4J, une réorganisation des points peut être faites. En effet, actuellement chaque point est stocké comme un sommet mais cela n'est pas utile pour tous. Les points ne servant que d'intermédiaires entre deux points ne nécessitent pas de créer un sommet, et leurs coordonnées peuvent simplement être stockées sous forme d'une liste dans un attribut de l'arrête liant les deux extrémités d'une ligne. Cela est donc valable pour tous les points qui ne sont ni reliés à un restaurant, ni une intersection, c'est à dire reliés à plus de deux autres points.
+        \item Toujours dans un objectif d'optimisation des données stockées dans la Neo4J, une réorganisation des points peut être faites. En effet, actuellement chaque point est stocké comme un sommet mais cela n'est pas utile pour tous. Les points ne servant que d'intermédiaires entre deux points ne nécessitent pas de créer un sommet, et leurs coordonnées peuvent simplement être stockées sous forme d'une liste dans un attribut de l'arrête liant les deux extrémités d'une ligne comme présenté dans la figure \emph{figure~\ref{updated_neo_model} page~\pageref{updated_neo_model}}. Cela est donc valable pour tous les points qui ne sont ni reliés à un restaurant, ni une intersection, c'est à dire reliés à plus de deux autres points.
     \end{itemize}
 
     D'un point de vue architectural les possibilités suivantes sont considérées :
