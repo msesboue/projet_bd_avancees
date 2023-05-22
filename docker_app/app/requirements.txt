@@ -1,4 +1,4 @@
-requests==2.21.0
+requests==2.31.0
 Flask==1.0.2
 pymongo==3.7.2
 py2neo==4.3.0
